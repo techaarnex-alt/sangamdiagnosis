@@ -697,6 +697,85 @@
     enrichProfile();setTimeout(enrichProfile,50);
   })();
   </script>
+  <style id="sangam-print-closing-flow">
+    /* Keep the authorised signature together when a report crosses an A4 page. */
+    @media print {
+      .rk-report-paper.rk-supplied:has(.rk-supplied-table tbody tr:nth-child(10)) {
+        display: block !important;
+        min-height: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+        break-after: auto !important;
+        page-break-after: auto !important;
+      }
+
+      .rk-report-paper.rk-supplied .rk-supplied-sign {
+        position: relative !important;
+        z-index: 4 !important;
+        clear: both !important;
+        isolation: isolate;
+        break-before: auto !important;
+        page-break-before: auto !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin-top: 6mm !important;
+        margin-bottom: 4mm !important;
+      }
+
+      .rk-report-paper.rk-supplied .rk-supplied-sign,
+      .rk-report-paper.rk-supplied .rk-supplied-sign * {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* A normal invoice uses the free space on the first A4 page for its footer. */
+      .rk-invoice:not(:has(.rk-invoice-table tbody tr:nth-child(12))) {
+        box-sizing: border-box !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 11mm !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        break-after: avoid-page !important;
+        page-break-after: avoid !important;
+      }
+
+      .rk-invoice:not(:has(.rk-invoice-table tbody tr:nth-child(12))) > * {
+        flex-shrink: 0 !important;
+      }
+
+      .rk-invoice:not(:has(.rk-invoice-table tbody tr:nth-child(12))) .rk-invoice-foot {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+        margin-top: auto !important;
+        margin-bottom: 0 !important;
+        flex-shrink: 0 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* Long invoices remain free to paginate, but their footer stays as one block. */
+      .rk-invoice:has(.rk-invoice-table tbody tr:nth-child(12)) {
+        min-height: 0 !important;
+        height: auto !important;
+        display: block !important;
+        overflow: visible !important;
+      }
+
+      .rk-invoice:has(.rk-invoice-table tbody tr:nth-child(12)) .rk-invoice-foot {
+        position: relative !important;
+        z-index: 2 !important;
+        clear: both !important;
+        margin-top: 10mm !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+    }
+  </style>
   <script src="sangam-enhancements.js"></script>
   <script src="sangam-workflow-sync.js"></script>
   <script src="sangam-parity.js?v=profiles-1"></script>
