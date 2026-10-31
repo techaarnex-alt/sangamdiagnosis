@@ -164,31 +164,31 @@
          a technician can remove an unrequested component and it will never appear in
          result entry or on the final report. */
       const testPanels = [
-        {name:'Liver Function Test (LFT)', category:'Biochemistry', components:[
+        {name:'Liver Function Test (LFT)', aliases:['lft','liver function test','hepatic function panel'], category:'Biochemistry', components:[
           {name:'Bilirubin Total', units:'mg/dL'}, {name:'Bilirubin Direct', units:'mg/dL'}, {name:'Bilirubin Indirect', units:'mg/dL'},
           {name:'AST (SGOT)', units:'U/L'}, {name:'ALT (SGPT)', units:'U/L'}, {name:'Alkaline Phosphatase', units:'U/L'}, {name:'GGT', units:'U/L'},
           {name:'Total Protein', units:'g/dL'}, {name:'Albumin', units:'g/dL'}, {name:'Globulin', units:'g/dL'}, {name:'A/G Ratio', units:''}
         ]},
-        {name:'Kidney Function Test (KFT)', category:'Biochemistry', components:[
+        {name:'Kidney Function Test (KFT)', aliases:['kft','kidney function test','renal function test','rft'], category:'Biochemistry', components:[
           {name:'Blood Urea', units:'mg/dL'}, {name:'Serum Creatinine', units:'mg/dL'}, {name:'Uric Acid', units:'mg/dL'},
           {name:'Sodium', units:'mmol/L'}, {name:'Potassium', units:'mmol/L'}, {name:'Chloride', units:'mmol/L'}
         ]},
-        {name:'Lipid Profile', category:'Biochemistry', components:[
+        {name:'Lipid Profile', aliases:['lipid profile','lipid panel','cholesterol profile'], category:'Biochemistry', components:[
           {name:'Cholesterol', units:'mg/dL'}, {name:'Triglycerides', units:'mg/dL'}, {name:'HDL Cholesterol', units:'mg/dL'},
           {name:'LDL Cholesterol', units:'mg/dL'}, {name:'VLDL Cholesterol', units:'mg/dL'}, {name:'Total Cholesterol / HDL Ratio', units:''}, {name:'LDL / HDL Ratio', units:''}
         ]},
-        {name:'Thyroid Profile', category:'Endocrinology', components:[
+        {name:'Thyroid Profile', aliases:['thyroid profile','thyroid function test','tft'], category:'Endocrinology', components:[
           {name:'TSH', units:'µU/mL'}, {name:'Free T3', units:'pg/mL'}, {name:'Free T4', units:'ng/dL'}
         ]},
-        {name:'Complete Blood Count (CBC)', category:'Haematology', components:[
+        {name:'Complete Blood Count (CBC)', aliases:['cbc','complete blood count','complete blood picture','cbp'], category:'Haematology', components:[
           {name:'Haemoglobin', units:'g/dL'}, {name:'Total Leukocyte Count', units:'/µL'}, {name:'Platelet Count', units:'/µL'}, {name:'RBC Count', units:'million/µL'},
           {name:'PCV / Haematocrit', units:'%'}, {name:'MCV', units:'fL'}, {name:'MCH', units:'pg'}, {name:'MCHC', units:'g/dL'},
           {name:'Neutrophils', units:'%'}, {name:'Lymphocytes', units:'%'}, {name:'Eosinophils', units:'%'}, {name:'Monocytes', units:'%'}, {name:'Basophils', units:'%'}
         ]},
-        {name:'Iron Profile', category:'Haematology', components:[
+        {name:'Iron Profile', aliases:['iron profile'], category:'Haematology', components:[
           {name:'Serum Iron', units:'µg/dL'}, {name:'TIBC', units:'µg/dL'}, {name:'UIBC', units:'µg/dL'}, {name:'Transferrin Saturation', units:'%'}, {name:'Ferritin', units:'ng/mL'}
         ]},
-        {name:'Electrolytes', category:'Biochemistry', components:[
+        {name:'Electrolytes', aliases:['electrolytes','serum electrolytes'], category:'Biochemistry', components:[
           {name:'Sodium', units:'mmol/L'}, {name:'Potassium', units:'mmol/L'}, {name:'Chloride', units:'mmol/L'}
         ]}
       ];
@@ -199,6 +199,25 @@
           rk.tests.push({name:component.name, category:panel.category, units:component.units, range:'Laboratory-validated reference range required', rate:null, panelComponent:true});
         }
       }); });
+      /* Reports booked before the component selector stored a panel name such as
+         “LFT” as one test. Expand pending legacy panels so every component gets
+         its own result field and report row. Final reports are left unchanged. */
+      const expandLegacyPanelReport = function (report) {
+        if (!report || report.status === 'Final' || !Array.isArray(report.tests)) return false;
+        let expanded = false;
+        const names = report.tests.reduce(function (all, name) {
+          const key = normaliseTestName(name);
+          const panel = testPanels.find(function (item) { return (item.aliases || []).some(function (alias) { return normaliseTestName(alias) === key; }); });
+          if (panel) { expanded = true; return all.concat(panel.components.map(function (component) { return component.name; })); }
+          return all.concat(name);
+        }, []);
+        if (!expanded) return false;
+        report.tests = names.filter(function (name, index) { return names.indexOf(name) === index; });
+        report.test = report.tests[0] || '';
+        return true;
+      };
+      const expandedLegacyReports = rk.reports.reduce(function (count, report) { return expandLegacyPanelReport(report) ? count + 1 : count; }, 0);
+      if (expandedLegacyReports) save();
       if (rk.panelTestDefinitionsVersion !== 1) { rk.panelTestDefinitionsVersion = 1; save(); }
       // Published Lucknow prices are starting values, not the laboratory's approved tariff.
       const initialRates = [
