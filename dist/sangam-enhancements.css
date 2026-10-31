@@ -1,0 +1,233 @@
+/* Current workflow refinements, adapted to Sangam's blue theme. */
+.primary,
+.primary-btn,
+.dashboard-action {
+  background: var(--teal) !important;
+  color: #fff !important;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11px;
+  min-height: 30px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, .19);
+}
+
+.primary:hover,
+.primary-btn:hover,
+.dashboard-action:hover { background: var(--teal-dark) !important; }
+
+/* Reports inherit the SD letterhead palette rather than the generic teal UI.
+   The maroon is taken from the SD mark; gold and soft charcoal echo the supplied
+   watermark paper without affecting the blue operations dashboard. */
+.rk-report-paper,
+.report-preview {
+  --teal: #a23523;
+  --teal-dark: #7c211d;
+  --mint: #fff4df;
+  --line: #e6c77b;
+}
+
+.rk-report-paper .rk-report-banner,
+.rk-report-paper .rk-letterhead,
+.rk-report-paper .rk-table th,
+.report-preview .report-brand { border-color: #a23523 !important; }
+
+.rk-report-paper .rk-table th,
+.report-preview .mini-report th { background: #fff3d8 !important; color: #7c211d !important; }
+
+.rk-report-paper .rk-patient-box,
+.rk-report-paper .rk-report-banner { border-color: #e6c77b !important; }
+
+.rk-report-paper .rk-letterhead b,
+.report-preview .report-brand b { color: #a23523 !important; }
+
+/* Sangam login: carry the blue operations palette through the welcome screen. */
+.login-screen {
+  background:
+    radial-gradient(circle at 15% 18%, #dbeafe 0, transparent 28%),
+    linear-gradient(135deg, #f8fbff, #e7efff) !important;
+}
+
+.login-aside {
+  background: linear-gradient(145deg, #0d1b4c, #2563eb) !important;
+}
+
+.login-brand span { color: #bfdbfe !important; }
+.login-aside p { color: #dbeafe !important; }
+.login-points { color: #e0ecff !important; }
+.login-points span:before { color: #dbeafe !important; background: rgba(255, 255, 255, .16) !important; }
+.login-field input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px #dbeafe !important; }
+
+/* Use the supplied SD mark in place of the temporary text-based logo badges. */
+.brand:before,
+.login-brand:before { display: none !important; }
+
+.brand img,
+.login-brand img {
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: #ffd400 !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+}
+
+.brand img { width: 45px !important; height: 45px !important; }
+.login-brand img { width: 52px !important; height: 52px !important; }
+
+/* Keep the patient search separate from the saved-records table. */
+.rk-card:has(#rkPatientSearch) .rk-form {
+  grid-template-columns: minmax(0, 560px);
+  margin: 0 0 20px;
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.rk-card:has(#rkPatientSearch) .rk-form label { grid-column: 1 / -1; }
+#rkPatientSearch { width: 100%; min-height: 42px; }
+
+/* Keep the finished sidebar usable at every desktop height. */
+.sidebar {
+  height: 100vh;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+  gap: 20px;
+}
+
+.sidebar .nav-label { display: block; margin-bottom: 10px; }
+.sidebar .nav { gap: 7px; padding: 3px 0 12px; }
+.sidebar .nav button {
+  min-height: 42px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  line-height: 1.25;
+  transform: none !important;
+}
+
+.sidebar .nav button:hover,
+.sidebar .nav button.active {
+  background: rgba(37, 99, 235, .24) !important;
+  border-color: rgba(191, 219, 254, .24) !important;
+  box-shadow: inset 3px 0 0 #93c5fd !important;
+}
+
+.sidebar .side-bottom {
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 13px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.sidebar .side-bottom p { margin-bottom: 6px; font-size: 10px; letter-spacing: .03em; }
+#rkBusinessDate { min-height: 42px; border-radius: 10px !important; padding: 9px 12px; }
+
+.logout {
+  background: var(--teal) !important;
+  color: #fff !important;
+  padding: 6px 9px;
+  font-size: 11px;
+  min-height: 30px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, .19);
+}
+
+.logout:hover { background: var(--teal-dark) !important; }
+
+/* Make every data-table action discoverable and consistently spaced. */
+table thead th:last-child:empty::after { content: 'Actions'; }
+table thead th:last-child:empty { min-width: 170px; }
+[data-rk-page="tests"] .rk-table { table-layout: fixed; min-width: 920px; }
+[data-rk-page="tests"] .rk-table th,
+[data-rk-page="tests"] .rk-table td { padding: 12px 16px; vertical-align: middle; white-space: normal; }
+[data-rk-page="tests"] .rk-table th:nth-child(1),
+[data-rk-page="tests"] .rk-table td:nth-child(1) { width: 17%; }
+[data-rk-page="tests"] .rk-table th:nth-child(2),
+[data-rk-page="tests"] .rk-table td:nth-child(2) { width: 17%; }
+[data-rk-page="tests"] .rk-table th:nth-child(3),
+[data-rk-page="tests"] .rk-table td:nth-child(3) { width: 17%; }
+[data-rk-page="tests"] .rk-table th:nth-child(4),
+[data-rk-page="tests"] .rk-table td:nth-child(4) { width: 28%; }
+[data-rk-page="tests"] .rk-table th:nth-child(5),
+[data-rk-page="tests"] .rk-table td:nth-child(5) { width: 12%; }
+[data-rk-page="tests"] .rk-table th:nth-child(6),
+[data-rk-page="tests"] .rk-table td:nth-child(6) { width: 9%; }
+
+#rkTestRows input,
+#rkTestRows textarea { width: 100% !important; max-width: 100%; }
+
+button[data-rk-action="patient-history"],
+button[data-rk-action="new-for-patient"],
+button[data-rk-action="invoice"],
+button[data-rk-action="open-draft"] {
+  background: var(--teal) !important;
+  color: #fff !important;
+  border: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, .19);
+}
+
+button[data-rk-action="patient-history"]:hover,
+button[data-rk-action="new-for-patient"]:hover,
+button[data-rk-action="invoice"]:hover,
+button[data-rk-action="open-draft"]:hover { background: var(--teal-dark) !important; }
+
+.rk-table td:last-child button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  min-height: 30px;
+  margin: 3px 6px 3px 0;
+  text-align: center;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.icon-btn.print,
+button[data-dashboard-action="print"] {
+  width: auto;
+  min-width: 72px;
+  height: 30px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--teal);
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, .16);
+}
+
+.icon-btn.print::after,
+button[data-dashboard-action="print"]::after { content: 'Print'; font-size: 10px; }
+.icon-btn.print svg { width: 15px; stroke: currentColor; }
+button[data-dashboard-action="print"] { font-size: 0; }
+button[data-dashboard-action="print"]::before { content: '⎙'; font-size: 16px; line-height: 1; }
+.icon-btn.print:hover,
+button[data-dashboard-action="print"]:hover { background: var(--teal-dark); }
+
+@media print {
+  .rk-report-paper .rk-supplied-table,
+  .rk-report-paper:not(.rk-supplied) .rk-table { width: 100%; table-layout: fixed; }
+  .rk-report-paper .rk-supplied-table th,
+  .rk-report-paper .rk-supplied-table td,
+  .rk-report-paper:not(.rk-supplied) .rk-table th,
+  .rk-report-paper:not(.rk-supplied) .rk-table td {
+    padding: 9px 10px;
+    vertical-align: middle;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .rk-report-paper:not(.rk-supplied) .rk-table th:nth-child(1),
+  .rk-report-paper:not(.rk-supplied) .rk-table td:nth-child(1) { width: 32%; }
+  .rk-report-paper:not(.rk-supplied) .rk-table th:nth-child(2),
+  .rk-report-paper:not(.rk-supplied) .rk-table td:nth-child(2) { width: 18%; }
+  .rk-report-paper:not(.rk-supplied) .rk-table th:nth-child(3),
+  .rk-report-paper:not(.rk-supplied) .rk-table td:nth-child(3) { width: 18%; }
+  .rk-report-paper:not(.rk-supplied) .rk-table th:nth-child(4),
+  .rk-report-paper:not(.rk-supplied) .rk-table td:nth-child(4) { width: 32%; }
+}
