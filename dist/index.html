@@ -693,6 +693,15 @@
     let refreshQueued=false;const observer=new MutationObserver(()=>{if(refreshQueued)return;refreshQueued=true;requestAnimationFrame(()=>{refreshQueued=false;refresh(document.body)})});
     refresh();observer.observe(document.body,{childList:true,subtree:true});
     document.title='Sangam Diagnostic Centre | Lab Operations';
+    let dashboardDate='';
+    const updateDashboardDate=()=>{
+      const dateChip=document.querySelector('.date-chip');
+      if(!dateChip)return;
+      const current=new Intl.DateTimeFormat('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kolkata'}).format(new Date());
+      if(current!==dashboardDate){dashboardDate=current;dateChip.textContent=current;}
+    };
+    updateDashboardDate();
+    window.setInterval(updateDashboardDate,60000);
     const enrichProfile=()=>{const profile=[...document.querySelectorAll('.module-page')].find(p=>p.dataset.module==='profile');if(profile&&!profile.querySelector('.sangam-certificate'))profile.querySelector('.module-card')?.insertAdjacentHTML('beforeend','<div class="sangam-certificate"><strong>Medical establishment information</strong><br>Certificate No. CMEE25136741 · Registration No. RMEE2444161<br>Validity: 04 Sep 2025 to 03 Sep 2030<br>Owner: Raj Kumar Shukla · In-charge: Dr. Arun Kumar Srivastava, MBBS · Reg. No. 31854</div>')};
     enrichProfile();setTimeout(enrichProfile,50);
   })();
