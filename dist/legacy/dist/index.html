@@ -421,7 +421,7 @@
         if (suppliedPaper) suppliedPaper.querySelector('.rk-letterhead').insertAdjacentHTML('afterend', '<div class="rk-report-banner"><span>Laboratory Examination Report</span><b>Report No. ' + safe(r.reportNo) + ' · ' + safe(r.specimen || 'Specimen not recorded') + '</b></div>');
         show('report');
       }
-      function invoice(id) { const r = findReport(id); if (!r) return; const p = findPatient(r.patientId) || {}; const invoiceNo = 'AD/INV/' + String(r.id || '').replace(/[^0-9]/g, '').padStart(4, '0'); activeInvoiceNo = invoiceNo; const fee = Number(r.fee || 0); const paid = Number(r.paid || 0); const due = Math.max(0, fee - paid); const perTest = r.tests.length ? fee / r.tests.length : fee; const items = r.tests.map(function (test, index) { const amount = Array.isArray(r.testRates) && r.testRates.length === r.tests.length ? Number(r.testRates[index]) : (index === r.tests.length - 1 ? fee - (perTest * (r.tests.length - 1)) : perTest); return '<tr><td>' + (index + 1) + '</td><td><b>' + safe(test) + '</b><br><span style="font-size:9px;color:#627372">Laboratory investigation</span></td><td>₹' + amount.toFixed(2) + '</td></tr>'; }).join(''); document.getElementById('rkInvoiceHeading').textContent = 'Invoice · ' + invoiceNo; document.getElementById('rkInvoiceArea').innerHTML = '<article class="rk-invoice"><header class="rk-invoice-head"><img src="logo.jpeg" alt="Aradhya Diagnostic"><div><h1>ARADHYA DIAGNOSTIC</h1><p>Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002</p><p>☎ +91-9621204754 &nbsp; | &nbsp; aradhyadiagnostic@gmail.com</p></div><div class="rk-invoice-title"><b>TAX INVOICE</b><span>Invoice no. ' + safe(invoiceNo) + '</span><span>Date: ' + safe(r.createdOn || today()) + '</span></div></header><section class="rk-invoice-info"><div><p><strong>Patient name</strong>: ' + safe(p.name || '—') + '</p><p><strong>Patient ID</strong>: ' + safe(p.id || r.patientId) + '</p><p><strong>Age / Gender</strong>: ' + safe(patientAge(p)) + ' / ' + safe(p.gender || '—') + '</p></div><div><p><strong>Report no.</strong>: ' + safe(r.reportNo) + '</p><p><strong>Referred by</strong>: ' + safe(p.reference || 'Self') + '</p><p><strong>Payment status</strong>: <span class="rk-invoice-status ' + (due ? 'due' : 'paid') + '">' + (due ? 'PART PAYMENT / DUE' : 'PAID IN FULL') + '</span></p></div></section><table class="rk-invoice-table"><thead><tr><th>S.No.</th><th>Laboratory service / investigation</th><th>Amount</th></tr></thead><tbody>' + items + '</tbody></table><section class="rk-invoice-summary"><p><span>Subtotal</span><b>₹' + fee.toFixed(2) + '</b></p><p><span>Discount</span><b>₹0.00</b></p><p class="grand"><span>Grand total</span><span>₹' + fee.toFixed(2) + '</span></p><p><span>Received</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p></section><footer class="rk-invoice-foot"><div><b>Thank you for choosing Aradhya Diagnostic.</b><br>This is a computer-generated invoice and does not require a physical stamp.<br>Services once rendered are subject to laboratory terms and conditions.</div><div style="text-align:center"><img src="doctor-signature-transparent.png" alt="Authorised signature"><b>Authorised Signatory</b></div></footer></article>'; show('invoice'); }
+      function invoice(id) { const r = findReport(id); if (!r) return; const p = findPatient(r.patientId) || {}; const invoiceNo = 'AD/INV/' + String(r.id || '').replace(/[^0-9]/g, '').padStart(4, '0'); activeInvoiceNo = invoiceNo; const fee = Number(r.fee || 0); const paid = Number(r.paid || 0); const due = Math.max(0, fee - paid); const perTest = r.tests.length ? fee / r.tests.length : fee; const items = r.tests.map(function (test, index) { const amount = Array.isArray(r.testRates) && r.testRates.length === r.tests.length ? Number(r.testRates[index]) : (index === r.tests.length - 1 ? fee - (perTest * (r.tests.length - 1)) : perTest); return '<tr><td>' + (index + 1) + '</td><td><b>' + safe(test) + '</b><br><span style="font-size:9px;color:#627372">Laboratory investigation</span></td><td>₹' + amount.toFixed(2) + '</td></tr>'; }).join(''); document.getElementById('rkInvoiceHeading').textContent = 'Invoice · ' + invoiceNo; document.getElementById('rkInvoiceArea').innerHTML = '<article class="rk-invoice"><header class="rk-invoice-head"><img src="logo.jpeg" alt="Aradhya Diagnostic"><div><h1>ARADHYA DIAGNOSTIC</h1><p>Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002</p><p>☎ +91-9621204754 &nbsp; | &nbsp; aradhyadiagnostic@gmail.com</p><p class="rk-invoice-gstin"><b>GSTIN:</b> 09DXFPK2029L1Z8</p></div><div class="rk-invoice-title"><b>TAX INVOICE</b><span>Invoice no. ' + safe(invoiceNo) + '</span><span>Date: ' + safe(r.createdOn || today()) + '</span></div></header><section class="rk-invoice-info"><div><p><strong>Patient name</strong>: ' + safe(p.name || '—') + '</p><p><strong>Patient ID</strong>: ' + safe(p.id || r.patientId) + '</p><p><strong>Age / Gender</strong>: ' + safe(patientAge(p)) + ' / ' + safe(p.gender || '—') + '</p></div><div><p><strong>Report no.</strong>: ' + safe(r.reportNo) + '</p><p><strong>Referred by</strong>: ' + safe(p.reference || 'Self') + '</p><p><strong>Payment status</strong>: <span class="rk-invoice-status ' + (due ? 'due' : 'paid') + '">' + (due ? 'PART PAYMENT / DUE' : 'PAID IN FULL') + '</span></p></div></section><table class="rk-invoice-table"><thead><tr><th>S.No.</th><th>Laboratory service / investigation</th><th>Amount</th></tr></thead><tbody>' + items + '</tbody></table><section class="rk-invoice-summary"><p><span>Subtotal</span><b>₹' + fee.toFixed(2) + '</b></p><p><span>Discount</span><b>₹0.00</b></p><p class="grand"><span>Grand total</span><span>₹' + fee.toFixed(2) + '</span></p><p><span>Received</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p></section><footer class="rk-invoice-foot"><div><b>Thank you for choosing Aradhya Diagnostic.</b><br>This is a computer-generated invoice and does not require a physical stamp.<br>Services once rendered are subject to laboratory terms and conditions.</div><div style="text-align:center"><img src="doctor-signature-transparent.png" alt="Authorised signature"><b>Authorised Signatory</b></div></footer></article>'; show('invoice'); }
       
       
       
@@ -601,14 +601,15 @@
       };
 
       const reportActionBarForLetterhead = host.querySelector('[data-rk-page="report"] .rk-actions');
-      reportActionBarForLetterhead.insertAdjacentHTML('afterbegin', '<label style="font-size:11px;font-weight:800;color:#47635f">Report format <select id="rkLetterheadMode" style="margin-left:5px;padding:8px;border:1px solid var(--line);border-radius:7px"><option value="with">With letterhead</option><option value="without">Without letterhead</option></select></label>');
+      if (reportActionBarForLetterhead && !document.getElementById('rkLetterheadMode')) reportActionBarForLetterhead.insertAdjacentHTML('afterbegin', '<label style="font-size:11px;font-weight:800;color:#47635f">Report format <select id="rkLetterheadMode" style="margin-left:5px;padding:8px;border:1px solid var(--line);border-radius:7px"><option value="with">With letterhead</option><option value="without">Without letterhead</option></select></label>');
       function applyLetterheadMode() {
         const paper = document.querySelector('#rkPrintArea .rk-report-paper');
-        if (paper) paper.classList.toggle('rk-without-letterhead', document.getElementById('rkLetterheadMode').value === 'without');
+        const mode = document.getElementById('rkLetterheadMode');
+        if (paper && mode) paper.classList.toggle('rk-without-letterhead', mode.value === 'without');
       }
       const basePreviewForRequestedWorkflow = preview;
       preview = function (id) { basePreviewForRequestedWorkflow(id); applyLetterheadMode(); };
-      document.getElementById('rkLetterheadMode').addEventListener('change', applyLetterheadMode);
+      document.getElementById('rkLetterheadMode')?.addEventListener('change', applyLetterheadMode);
 
       reportFormForRates.addEventListener('submit', function () {
         const reportIdsBeforeBooking = rk.reports.map(function (report) { return report.id; });
@@ -1211,6 +1212,20 @@
       #rkWorkflow .rk-page.active[data-rk-page="invoice"] { display:block!important; margin:0!important; padding:0!important; }
       #rkWorkflow .rk-page.active[data-rk-page="invoice"] .rk-topline { display:none!important; }
     }
+  </style>
+  <style id="sangam-letterhead-mode-fix">
+    /* The report stationery is an image, so hide it explicitly in the plain-paper mode.
+       This wins over the general print rule that displays the image for every report. */
+    .rk-report-paper.rk-supplied.rk-without-letterhead {
+      padding:18mm 12mm 24mm !important;
+      background:#fff !important;
+    }
+    .rk-report-paper.rk-supplied.rk-without-letterhead::before,
+    .rk-report-paper.rk-supplied.rk-without-letterhead .rk-print-stationery {
+      display:none !important;
+      background:none !important;
+    }
+    .rk-invoice-gstin { font-weight:700 !important; letter-spacing:.03em; }
   </style>
   <script id="sangam-range-flags">
     (() => {
