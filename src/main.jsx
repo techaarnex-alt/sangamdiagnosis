@@ -90,7 +90,7 @@ function ReportDocument({ report, patient }) {
             <tr className="department"><td colSpan="4">Biochemistry</td></tr>
             {group.map((test) => <tr key={test.name}><td><b>{test.name.toUpperCase()}</b><small>Method / As per laboratory protocol</small></td><td>{test.value || '—'}</td><td>{test.unit}</td><td>{test.range}</td></tr>)}
           </tbody></table>
-          {last && <><div className="report-end">End of Report</div><div className="report-signatures"><section className="pathology-incharge-signature" aria-label="Pathology Incharge signature space"><div className="signature-space" aria-hidden="true" /><b>Pathology Incharge</b><small>Signature</small></section><footer className="signature"><img src="/doctor-signature-transparent.png" alt="Authorised pathologist signature" /><b>Pathologist</b><strong>DR. Abha Mishra</strong><small>Computer-generated report · Authorised signatory</small></footer></div></>}
+          {last && <><div className="report-end">End of Report</div><div className="report-signatures"><section className="pathology-incharge-signature" aria-label="Pathology Incharge signature space"><div className="signature-space" aria-hidden="true" /><b>Pathology Incharge</b><small>Signature</small></section><footer className="signature"><img src="/doctor-signature-transparent.png" alt="Authorised pathologist signature" /><b>Pathologist</b><strong>DR. Abha Mishra</strong><span>MBBS, MD, PATH</span><small>Computer-generated report · Authorised signatory</small></footer></div></>}
         </div>
       </article>;
     })}
