@@ -226,6 +226,14 @@
     #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation > * { position: relative !important; z-index: 3 !important; }
     #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation .rk-supplied-sign { margin-top: 12mm !important; }
     @media print { #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation { width: 210mm !important; margin: 0 !important; } }
+    @media print {
+      #rkPrintArea .rk-report-paper.rk-supplied { position: relative !important; display: block !important; box-sizing: border-box !important; width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important; min-height: 297mm !important; height: 297mm !important; max-height: 297mm !important; margin: 0 !important; padding: 52mm 12mm 40mm !important; overflow: hidden !important; break-after: page !important; page-break-after: always !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied:last-child { break-after: auto !important; page-break-after: auto !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied .rk-print-stationery { display: none !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied::before { content: "" !important; display: block !important; position: absolute !important; inset: 0 !important; width: auto !important; height: auto !important; background: url("report.jpeg") center / 210mm 297mm no-repeat !important; opacity: 1 !important; z-index: 0 !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied > * { position: relative !important; z-index: 3 !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign { position: relative !important; right: auto !important; bottom: auto !important; left: auto !important; margin: 12mm 0 0 !important; padding: 0 !important; }
+    }
   `;
   document.head.appendChild(reportPrintStyle);
 
