@@ -193,4 +193,53 @@
   const reportsButton = navigation?.querySelector('[data-nav="reports"]');
   const billingButton = navigation?.querySelector('[data-nav="billing"]');
   if (reportsButton && billingButton) reportsButton.insertAdjacentElement('afterend', billingButton);
+
+  // Keep the supplied report stationery intact while making its printed text
+  // clearer and restoring the two signature positions requested by the centre.
+  const reportPrintStyle = document.createElement('style');
+  reportPrintStyle.id = 'sangam-report-print-readability';
+  reportPrintStyle.textContent = `
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-patient-box { font-size: 11.5px !important; line-height: 1.62 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-patient-box strong { font-size: 9.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table { font-size: 11px !important; line-height: 1.3 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table th { padding: 5px 8px !important; font-size: 9.6px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td { padding: 10px 8px !important; font-size: 11px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2),
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(3),
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(4) { color: #111 !important; font-weight: 700 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table .test-name { font-size: 11.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-method { font-size: 8.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-department { font-size: 9.7px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-end { font-size: 8.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign { display: grid !important; grid-template-columns: 1fr 1fr !important; align-items: end !important; column-gap: 35mm !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech { display: block !important; justify-self: start !important; min-width: 45mm !important; font-size: 10px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .technician-signature-space { width: 42mm !important; height: 14mm !important; margin: 0 0 2mm !important; border-bottom: .35mm solid #557b75 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech b { display: block !important; font-size: 10.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech small { display: block !important; margin-top: 1mm !important; font-size: 8.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign > div:last-child { justify-self: end !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-path b { font-size: 10.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-path .doctor-title { font-size: 11.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-verification { font-size: 8.2px !important; }
+  `;
+  document.head.appendChild(reportPrintStyle);
+
+  const applyReportPrintSettings = (root = document) => {
+    $$('.rk-supplied-sign .rk-tech', root).forEach((panel) => {
+      if (panel.dataset.pathologyInchargeReady) return;
+      panel.dataset.pathologyInchargeReady = 'true';
+      const signatureLine = document.createElement('div');
+      signatureLine.className = 'technician-signature-space';
+      signatureLine.setAttribute('aria-label', 'Pathology Incharge signature space');
+      const label = document.createElement('b');
+      label.textContent = 'Pathology Incharge';
+      const caption = document.createElement('small');
+      caption.textContent = 'Signature';
+      panel.replaceChildren(signatureLine, label, caption);
+    });
+    $$('.rk-supplied-sign .doctor-title', root).forEach((title) => {
+      if (title.textContent !== 'DR. Abha Mishra') title.textContent = 'DR. Abha Mishra';
+    });
+  };
+  applyReportPrintSettings();
+  new MutationObserver(() => applyReportPrintSettings()).observe(document.body, { childList: true, subtree: true });
 })();

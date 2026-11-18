@@ -41,13 +41,38 @@ function ReportDocument({ report, patient }) {
   const rows = report.tests;
   const chunks = [];
   for (let start = 0, page = 0; start < Math.max(rows.length, 1); page += 1) {
-    const size = page === 0 ? 7 : 11;
+    // Larger print type needs a little more vertical room on each sheet.
+    const size = page === 0 ? 6 : 9;
     chunks.push(rows.slice(start, start + size));
     start += size;
   }
   if (!chunks.length) chunks.push([]);
 
   return <div className="report-stack">
+    <style>{`
+      .report-paper .patient-card { font-size: 10.7px; line-height: 1.48; }
+      .report-paper .patient-card b { font-size: 9.6px; }
+      .report-paper .report-title, .report-paper .continuation-title { font-size: 10px; }
+      .report-paper .report-title small { font-size: 8.2px; }
+      .report-paper .report-table { font-size: 10.8px; line-height: 1.25; }
+      .report-paper .report-table th { padding: 3.1mm; font-size: 9.2px; }
+      .report-paper .report-table td { padding: 3.2mm 3mm; }
+      .report-paper .report-table td b { font-size: 11.4px; line-height: 1.22; }
+      .report-paper .report-table td small { font-size: 8.6px; line-height: 1.24; }
+      .report-paper .report-table .department td { font-size: 9.6px; }
+      .report-paper .report-end { bottom: 38mm; font-size: 8.6px; }
+      .report-paper .report-signatures { position: absolute; right: 0; bottom: 1mm; left: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12mm; color: #173f3b; }
+      .report-paper .pathology-incharge-signature { width: 57mm; min-height: 25mm; padding-top: 5mm; font-size: 10px; text-align: left; }
+      .report-paper .signature-space { width: 43mm; height: 14mm; margin-bottom: 1.5mm; border-bottom: .35mm solid #557b75; }
+      .report-paper .pathology-incharge-signature b, .report-paper .pathology-incharge-signature small { display: block; }
+      .report-paper .pathology-incharge-signature b { font-size: 10.5px; text-transform: uppercase; }
+      .report-paper .pathology-incharge-signature small { margin-top: 1mm; color: #5d716e; font: 8.5px Arial, sans-serif; }
+      .report-paper .report-signatures .signature { position: static; width: 57mm; font-size: 10px; line-height: 1.3; }
+      .report-paper .report-signatures .signature img { width: 34mm; height: 14mm; }
+      .report-paper .report-signatures .signature b { font-size: 10.6px; }
+      .report-paper .report-signatures .signature strong { font-size: 11.5px; }
+      .report-paper .report-signatures .signature small { font-size: 8.5px; }
+    `}</style>
     {chunks.map((group, index) => {
       const first = index === 0;
       const last = index === chunks.length - 1;
@@ -65,7 +90,7 @@ function ReportDocument({ report, patient }) {
             <tr className="department"><td colSpan="4">Biochemistry</td></tr>
             {group.map((test) => <tr key={test.name}><td><b>{test.name.toUpperCase()}</b><small>Method / As per laboratory protocol</small></td><td>{test.value || '—'}</td><td>{test.unit}</td><td>{test.range}</td></tr>)}
           </tbody></table>
-          {last && <><div className="report-end">End of Report</div><footer className="signature"><img src="/doctor-signature-transparent.png" alt="Authorised signature" /><b>Pathologist</b><strong>Dr. Arun Kumar Srivastava</strong><span>MBBS</span><small>Computer-generated report · Authorised signatory</small></footer></>}
+          {last && <><div className="report-end">End of Report</div><div className="report-signatures"><section className="pathology-incharge-signature" aria-label="Pathology Incharge signature space"><div className="signature-space" aria-hidden="true" /><b>Pathology Incharge</b><small>Signature</small></section><footer className="signature"><img src="/doctor-signature-transparent.png" alt="Authorised pathologist signature" /><b>Pathologist</b><strong>DR. Abha Mishra</strong><small>Computer-generated report · Authorised signatory</small></footer></div></>}
         </div>
       </article>;
     })}
