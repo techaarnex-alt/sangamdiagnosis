@@ -1,0 +1,6 @@
+.sidebar .nav button{min-height:46px!important;gap:12px!important;align-items:center!important}
+.sidebar .nav button>svg,.sidebar .nav button>b,.sidebar .nav button[data-nav="settings"]::before{display:grid!important;place-items:center!important;box-sizing:border-box!important;flex:0 0 22px!important;width:22px!important;height:22px!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;color:currentColor!important;font:700 21px/1 "Segoe UI Symbol","Arial Unicode MS",sans-serif!important;text-align:center!important}
+.sidebar .nav button>svg{fill:none!important;stroke:currentColor!important;stroke-width:1.9!important}
+.sidebar .nav button>span{font:700 15px/1.25 Arial,Helvetica,sans-serif!important}
+.sidebar .nav button[data-nav="settings"] svg{display:none!important}
+.sidebar .nav button[data-nav="settings"]::before{content:"⚙";font-size:24px!important;font-weight:900!important}

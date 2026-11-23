@@ -1,0 +1,2 @@
+/* The dashboard heading intentionally omits the changing calendar date. */
+.sangam-dash-heading > div > span{display:none!important}

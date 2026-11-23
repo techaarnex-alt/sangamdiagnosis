@@ -32,7 +32,7 @@
 
   // Current dashboard wording and live totals.
   const greeting = $('.topbar h1');
-  if (greeting) greeting.textContent = 'Hi Sangam Diagnosis';
+  if (greeting) greeting.textContent = 'Welcome Sangam Diagnosis';
   $$('[data-rk-page="tests"] .rk-topline p').forEach((node) => node.remove());
   $$('[data-rk-page="tests"] .rk-reference-hint').forEach((node) => {
     if (node.textContent.includes('Published reference ranges')) node.remove();

@@ -20,6 +20,28 @@
 <style>img[src="doctor-signature-transparent.png"]{filter:none;mix-blend-mode:multiply;opacity:.88}.report-footer img[src="doctor-signature-transparent.png"],.rk-path img[src="doctor-signature-transparent.png"],.rk-sign img[src="doctor-signature-transparent.png"],.rk-signoff img[src="doctor-signature-transparent.png"]{width:140px;height:70px;object-fit:contain}.technician-signature-space{height:40px;width:140px;border-bottom:1px solid #777;margin-bottom:5px}.rk-supplied .rk-supplied-table{width:100%;table-layout:fixed}.rk-supplied .rk-supplied-table th,.rk-supplied .rk-supplied-table td{white-space:normal;overflow-wrap:anywhere;word-break:normal}.rk-supplied .rk-supplied-table th:nth-child(1){width:30%}.rk-supplied .rk-supplied-table th:nth-child(2){width:13%}.rk-supplied .rk-supplied-table th:nth-child(3){width:12%}.rk-supplied .rk-supplied-table th:nth-child(4){width:45%}</style>
   <link rel="stylesheet" href="sangam-enhancements.css" />
   <link rel="stylesheet" href="sangam-parity.css?v=profiles-1" />
+  <link rel="stylesheet" href="sangam-dashboard.css" />
+  <link rel="stylesheet" href="sangam-profile.css" />
+  <link rel="stylesheet" href="sangam-settings.css" />
+  <link rel="stylesheet" href="sangam-settings-icon.css" />
+  <style id="sangam-patient-nav-nowrap">
+    @media (min-width:1051px){.app{grid-template-columns:280px minmax(0,1fr)}}
+    .sidebar .nav button[data-nav="patients"],.sidebar .nav button[data-nav="patients"] span{white-space:nowrap}
+    .sidebar .nav button[data-nav="patients"]{font-size:13px}
+  </style>
+  <style id="sangam-dashboard-no-horizontal-scroll">
+    .main-grid{grid-template-columns:minmax(0,2.15fr) minmax(260px,.85fr)}
+    .main-grid .table-wrap{overflow-x:visible}
+    .main-grid .table-wrap>table{min-width:0;table-layout:fixed}
+    .main-grid .table-wrap th,.main-grid .table-wrap td{white-space:normal;overflow-wrap:anywhere}
+    .main-grid .table-wrap th,.main-grid .table-wrap td{padding-left:14px;padding-right:14px}
+    @media(max-width:1050px){.main-grid{grid-template-columns:1fr}}
+  </style>
+  <style id="sangam-app-width-guard">
+    html,body{max-width:100%;overflow-x:hidden}
+    .app{width:100%;max-width:100%;overflow-x:hidden}
+    .sidebar,.shell,.sidebar .nav,.sidebar .nav button{min-width:0}
+  </style>
 </head>
 <body>
   <section class="login-screen" id="loginScreen"><div class="login-shell"><div class="login-aside"><div class="login-brand"><img src="logo.jpeg" alt="Aradhya Diagnostic logo"><div><b>ARADHYA</b><span>Diagnostic Suite</span></div></div><h1>Precision begins with protected access.</h1><p>Sign in to securely manage registrations, test workflow and clinical report delivery.</p><div class="login-points"><span>Centralised lab workflow</span><span>Professional report delivery</span><span>Browser-local session protection</span></div></div><div class="login-panel"><form class="login-form" id="loginForm"><h2>Welcome back</h2><p>Enter your laboratory account details to continue.</p><div class="login-field"><label for="loginUser">Username</label><input id="loginUser" autocomplete="username" required placeholder="Enter your username"></div><div class="login-field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password"></div><button class="primary login-submit" type="submit">Sign in to workspace</button><div class="login-error" id="loginError">The username or password is incorrect.</div><p class="login-help">Aradhya Diagnostic · Laboratory Operations</p></form></div></div></section>
@@ -28,15 +50,14 @@
       <div class="brand"><img src="logo.jpeg" alt="Aradhya Diagnostic logo"><div><b>ARADHYA</b><span>Diagnostic Suite</span></div></div>
       <div><div class="nav-label">Workspace</div><nav class="nav">
         <button class="active" data-nav="dashboard"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg><span>Dashboard</span></button>
-        <button data-nav="patients"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Patients</span></button>
+        <button data-nav="patients"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Patients &amp; Registration</span></button>
         <button data-nav="reports"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg><span>Reports</span></button>
         <button data-nav="analytics"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16v-7"/></svg><span>Analytics</span></button>
         <button data-nav="settings"><svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-2 2-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V20h-2.82v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33h-.01a1.65 1.65 0 0 0-1-1.51V5h2.82v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 2 2-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H20v2.82h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg><span>Settings</span></button>
       </nav></div>
-      <div class="side-bottom"><p>Licensed medical establishment</p><b>CMEE25140880</b></div>
     </aside>
     <main class="shell">
-      <header class="topbar"><div><div class="crumb">Operations / Overview</div><h1>Good morning, Indresh.</h1></div><div class="top-actions"><span class="date-chip">Thursday, 23 October 2026</span><button class="primary" id="newPatient">+ New patient</button><div class="avatar">IY</div></div></header>
+      <header class="topbar"><div><h1>Good morning, Indresh.</h1></div><div class="top-actions"><span class="date-chip">Thursday, 23 October 2026</span><div class="avatar">IY</div></div></header>
       <section class="intro"><div><h2>Lab operations, with clarity.</h2><p>Register patients, track specimens and deliver clinically polished reports from one secure workspace.</p></div><div class="welcome-meta"><div><b>98%</b><span>Reports on time</span></div><div><b>12 min</b><span>Avg. processing</span></div></div></section>
       <section class="stats" id="analyticsSection"><article class="stat"><div class="stat-top"><span>Today’s registrations</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21v-2a8 8 0 0 1 16 0v2"/></svg></div></div><strong id="registrationCount">24</strong><small class="up">↑ 12% from yesterday</small></article><article class="stat"><div class="stat-top"><span>Samples in process</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.2L5.2 16a4 4 0 0 0 3.5 5.9h6.6a4 4 0 0 0 3.5-5.9L14 8.2V3"/><path d="M8 16h8"/></svg></div></div><strong>18</strong><small class="warn">6 need validation</small></article><article class="stat"><div class="stat-top"><span>Reports ready</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></div></div><strong>31</strong><small class="up">Ready for delivery</small></article><article class="stat"><div class="stat-top"><span>Collections today</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18M5 5h14v14H5z"/></svg></div></div><strong>₹18,460</strong><small class="up">↑ 8% from yesterday</small></article></section>
       <section class="main-grid"><div><article class="card"><div class="card-head"><h3>Recent patient activity</h3><a id="viewAll">View all patients</a></div><div class="filters"><input id="patientSearch" placeholder="Search by patient, ID or test…"><select><option>All status</option><option>In process</option><option>Ready</option></select></div><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Patient ID</th><th>Tests</th><th>Collection</th><th>Status</th><th></th></tr></thead><tbody id="patientRows"><tr><td><div class="patient"><span class="mini">MM</span><div><b>Mrs Madhuri</b><div class="muted">34 yrs · Female</div></div></div></td><td>AD-49046</td><td>Blood Sugar Fasting</td><td>21 Oct, 10:12 AM</td><td><span class="status done">Report ready</span></td><td><div class="row-actions"><button class="icon-btn preview" title="Open report"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="icon-btn print" title="Print report"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg></button></div></td></tr><tr><td><div class="patient"><span class="mini">AK</span><div><b>Arun Kumar</b><div class="muted">48 yrs · Male</div></div></div></td><td>AD-49045</td><td>CBC, HbA1c</td><td>21 Oct, 09:48 AM</td><td><span class="status progress">Validation</span></td><td><div class="row-actions"><button class="icon-btn preview"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td></tr><tr><td><div class="patient"><span class="mini">RS</span><div><b>Riya Singh</b><div class="muted">27 yrs · Female</div></div></div></td><td>AD-49044</td><td>Thyroid Profile</td><td>21 Oct, 09:31 AM</td><td><span class="status pending">Collected</span></td><td><div class="row-actions"><button class="icon-btn preview"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td></tr></tbody></table></div></article>
@@ -51,7 +72,7 @@
     function showToast(message){toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}
     function openInfo(title,text,body){document.getElementById('infoTitle').textContent=title;document.getElementById('infoText').textContent=text;document.getElementById('infoBody').innerHTML=body;infoModal.classList.add('open')}
     function closeInfo(){infoModal.classList.remove('open')}
-    document.getElementById('newPatient').onclick=openModal; document.getElementById('closeModal').onclick=closeModal;document.getElementById('cancel').onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal()};
+    document.getElementById('closeModal').onclick=closeModal;document.getElementById('cancel').onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal()};
     document.getElementById('closeInfo').onclick=closeInfo;document.getElementById('infoDone').onclick=closeInfo;infoModal.onclick=e=>{if(e.target===infoModal)closeInfo()};
     document.getElementById('patientForm').onsubmit=e=>{e.preventDefault();const d=new FormData(e.target),name=d.get('name'), initials=name.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase(), num=49047+document.querySelectorAll('#patientRows tr').length;document.getElementById('patientRows').insertAdjacentHTML('afterbegin',`<tr><td><div class="patient"><span class="mini">${initials}</span><div><b>${name}</b><div class="muted">${d.get('age')} yrs · ${d.get('gender')}</div></div></div></td><td>AD-${num}</td><td>${d.get('test')}</td><td>Today, just now</td><td><span class="status pending">Collected</span></td><td><div class="row-actions"><button class="icon-btn preview" title="Open report"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td></tr>`);document.getElementById('registrationCount').textContent=Number(document.getElementById('registrationCount').textContent)+1;e.target.reset();closeModal();showToast('Patient registered successfully.')};
     function applyFilters(){let q=document.getElementById('patientSearch').value.toLowerCase(),status=document.querySelector('.filters select').value;document.querySelectorAll('#patientRows tr').forEach(row=>{let text=row.innerText.toLowerCase(),matchesText=text.includes(q),matchesStatus=status==='All status'||text.includes(status.toLowerCase());row.classList.toggle('hidden',!(matchesText&&matchesStatus))})}
@@ -62,7 +83,7 @@
     const appShell=document.getElementById('appShell'),loginScreen=document.getElementById('loginScreen'),loginError=document.getElementById('loginError');
     function showWorkspace(){loginScreen.classList.add('hidden');appShell.classList.remove('hidden')}
     function showLogin(){appShell.classList.add('hidden');loginScreen.classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginUser').focus()}
-    const logoutButton=document.createElement('button');logoutButton.className='secondary logout';logoutButton.id='logoutButton';logoutButton.textContent='Log out';document.querySelector('.top-actions').insertBefore(logoutButton,document.querySelector('.avatar'));
+    const logoutButton=document.createElement('button');logoutButton.className='secondary logout';logoutButton.id='logoutButton';logoutButton.textContent='Log out';const sidebarUtilities=document.createElement('div');sidebarUtilities.className='sidebar-utilities';sidebarUtilities.appendChild(logoutButton);document.querySelector('.sidebar').appendChild(sidebarUtilities);
     logoutButton.onclick=()=>{sessionStorage.removeItem('sangamDiagnosticSession');showLogin()};
     document.getElementById('loginForm').onsubmit=e=>{e.preventDefault();const username=document.getElementById('loginUser').value.trim(),password=document.getElementById('loginPassword').value;if(username==='admin'&&password==='Sangam@2026'){sessionStorage.setItem('sangamDiagnosticSession','active');loginError.classList.remove('show');showWorkspace();showToast('Signed in to the laboratory workspace.')}else{loginError.classList.add('show')}};
     if(sessionStorage.getItem('sangamDiagnosticSession')==='active')showWorkspace();
@@ -106,7 +127,7 @@
       <section class="module-page" data-module="doctors"><div class="module-head"><div><p class="eyebrow">Referral directory</p><h2>Referring doctors</h2><p class="muted">Saved doctors can be selected during patient registration.</p></div></div><div class="module-grid"><article class="module-card"><h3>Add doctor</h3><form class="module-form" id="rkDoctorForm"><label>Name<input required name="name" placeholder="Doctor name"></label><label>Specialty<input name="specialty" placeholder="e.g. Physician"></label><label>Mobile<input name="mobile" placeholder="Mobile number"></label><label>Clinic / address<input name="address" placeholder="Clinic address"></label><div class="wide form-actions"><button class="primary">Save doctor</button></div></form></article><article class="module-card"><h3>Doctor directory</h3><div class="table-wrap"><table class="rk-table"><thead><tr><th>Name</th><th>Specialty</th><th>Mobile</th><th>Clinic</th></tr></thead><tbody id="rkDoctorRows"></tbody></table></div></article></div></section>
       <section class="module-page" data-module="profile"><div class="module-head"><div><p class="eyebrow">Laboratory configuration</p><h2>Lab profile</h2><p class="muted">Registration and authorised-signatory information.</p></div></div><div class="module-grid"><article class="module-card"><h3>Aradhya Diagnostic</h3><div class="quick-list"><div><span><b>Medical establishment certificate</b><br><small>CMEE25140880</small></span><span>Valid through 13 Nov 2030</span></div><div><span><b>Address</b><br><small>Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002</small></span></div><div><span><b>Authorised pathologist</b><br><small>Dr. Priyanshi · MBBS, MD (Pathology) · Reg. No. 91862</small></span></div></div></article><article class="module-card"><h3>Local data controls</h3><p>Patient, report, billing and doctor records are stored only in this browser for the current prototype.</p><div class="rk-note">For production use, connect these sections to a secure backend with role-based accounts, audit records, and encrypted patient data.</div></article></div></section>
       <section class="module-page" data-module="reportdetail"><div class="module-head"><div><p class="eyebrow">Report preview</p><h2 id="rkPreviewTitle">Final report</h2></div><div class="rk-actions"><button class="secondary" data-rkgo="reportsflow">Back to reports</button><button class="primary" id="rkPrintReport">Print / Save PDF</button></div></div><div id="rkReportPaper"></div></section>`);
-    const rkNav=document.querySelector('.nav');function rkLabel(from,to,label){const button=rkNav.querySelector(`[data-nav="${from}"]`);if(!button)return;button.dataset.nav=to;button.querySelector('span').textContent=label}rkLabel('intake','patients','Patients');rkLabel('catalogue','newreport','New Report');rkLabel('results','resultflow','Result Entry');rkLabel('reports','reportsflow','Reports');rkLabel('feedback','billing','Billing');rkLabel('settings','profile','Lab Profile');const doctorNav=document.createElement('button');doctorNav.dataset.nav='doctors';doctorNav.innerHTML='<b style="font-size:16px;width:18px;text-align:center">⚕</b><span>Doctors</span>';rkNav.insertBefore(doctorNav,rkNav.querySelector('[data-nav="profile"]'));
+    const rkNav=document.querySelector('.nav');function rkLabel(from,to,label){const button=rkNav.querySelector(`[data-nav="${from}"]`);if(!button)return;button.dataset.nav=to;button.querySelector('span').textContent=label}rkLabel('intake','patients','Patients & Registration');rkLabel('catalogue','newreport','New Report');rkLabel('results','resultflow','Result Entry');rkLabel('reports','reportsflow','Reports');rkLabel('feedback','billing','Billing');rkLabel('settings','profile','Lab Profile');const doctorNav=document.createElement('button');doctorNav.dataset.nav='doctors';doctorNav.innerHTML='<b style="font-size:16px;width:18px;text-align:center">⚕</b><span>Doctors</span>';rkNav.insertBefore(doctorNav,rkNav.querySelector('[data-nav="profile"]'));
     function rkPatients(){return labData.patients||[]}function rkPatient(id){return rkPatients().find(p=>p.id===id)}function rkReport(id){return labData.reports.find(r=>r.id===id)}function rkDate(){return new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}function rkId(prefix,count){return `${prefix}-${new Date().getFullYear()}-${String(count+1).padStart(4,'0')}`}function rkPersist(){persistLab()}function rkGo(page){const children=[...document.querySelector('.shell').children].filter(c=>c.id!=='moduleViews');children.forEach(c=>c.classList.add('hidden'));modules.classList.remove('hidden');modules.querySelectorAll('.module-page').forEach(p=>p.classList.toggle('active',p.dataset.module===page));rkNav.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.nav===page));window.scrollTo({top:0,behavior:'smooth'});rkRender()}
     function rkRender(){const tests=allTests();const selectOptions=rkPatients().map(p=>`<option value="${esc(p.id)}">${esc(p.id)} · ${esc(p.name)}</option>`).join('')||'<option value="">Register a patient first</option>';document.getElementById('rkReportPatient').innerHTML=selectOptions;document.getElementById('rkReportTests').innerHTML=tests.map((t,i)=>`<label class="test-option"><input type="checkbox" name="tests" value="${esc(t.name)}" ${i===0?'checked':''}><span><strong>${esc(t.name)}</strong><small>${esc(t.category)} · ${esc(t.range)}</small></span></label>`).join('');document.getElementById('rkPatientRows').innerHTML=rkPatients().map(p=>`<tr><td><b>${esc(p.id)}</b></td><td>${esc(p.name)}<br><small>${esc(p.reference||'Self')}</small></td><td>${esc(p.age)} / ${esc(p.gender)}</td><td>${esc(p.mobile||'—')}</td><td><button class="secondary rk-start-report" data-patient="${esc(p.id)}">New report</button></td></tr>`).join('')||'<tr><td colspan="5" class="module-empty">No patients registered yet.</td></tr>';document.getElementById('rkDoctorRows').innerHTML=labData.doctors.map(d=>`<tr><td><b>${esc(d.name)}</b></td><td>${esc(d.specialty||'—')}</td><td>${esc(d.mobile||'—')}</td><td>${esc(d.address||'—')}</td></tr>`).join('')||'<tr><td colspan="4" class="module-empty">No referring doctors saved.</td></tr>';document.getElementById('rkReferral').innerHTML='<option>Self</option>'+labData.doctors.map(d=>`<option>${esc(d.name)}${d.specialty?' · '+esc(d.specialty):''}</option>`).join('');const final=labData.reports.filter(r=>r.status==='Final');document.getElementById('rkReportRows').innerHTML=final.map(r=>{const p=rkPatient(r.patientId)||{};return `<tr><td><b>${esc(r.reportNo)}</b></td><td>${esc(p.name||'Patient removed')}</td><td>${r.tests.map(esc).join('<br>')}</td><td>${esc(r.reportedOn)}</td><td>${r.paid>=r.fee?'Paid':'Due ₹'+(r.fee-r.paid)}</td><td><button class="secondary rk-preview" data-report="${esc(r.id)}">View / print</button></td></tr>`}).join('')||'<tr><td colspan="6" class="module-empty">No final reports yet.</td></tr>';const billed=labData.reports.reduce((s,r)=>s+Number(r.fee||0),0),paid=labData.reports.reduce((s,r)=>s+Number(r.paid||0),0);document.getElementById('rkBillingStats').innerHTML=`<div class="rk-stat"><span>Total billed</span><b>₹${billed}</b></div><div class="rk-stat"><span>Received</span><b>₹${paid}</b></div><div class="rk-stat"><span>Balance due</span><b>₹${billed-paid}</b></div>`;document.getElementById('rkBillingRows').innerHTML=labData.reports.map(r=>{const p=rkPatient(r.patientId)||{},due=Math.max(0,r.fee-r.paid);return `<tr><td><b>${esc(r.reportNo)}</b></td><td>${esc(p.name||'Patient removed')}</td><td>₹${r.fee}</td><td>₹${r.paid}</td><td>${due?'₹'+due:'—'}</td><td>${due?`<button class="primary rk-collect" data-report="${esc(r.id)}">Collect ₹${due}</button>`:'Paid'}</td></tr>`}).join('')||'<tr><td colspan="6" class="module-empty">No report charges created.</td></tr>';const drafts=labData.reports.filter(r=>r.status==='Draft');document.getElementById('rkResultWorkspace').innerHTML=drafts.length?`<div class="module-grid"><article class="module-card"><h3>Draft reports awaiting results</h3><div class="quick-list">${drafts.map(r=>{const p=rkPatient(r.patientId)||{};return `<div><span><b>${esc(r.reportNo)}</b><br><small>${esc(p.name||'Patient removed')} · ${r.tests.map(esc).join(', ')}</small></span><button class="primary rk-edit-result" data-report="${esc(r.id)}">Enter results</button></div>`}).join('')}</div></article><aside class="module-card"><h3>Finalisation checklist</h3><div class="rk-note">Verify observed values, units and reference ranges before finalising a report. A final report remains available for print and billing.</div></aside></div>`:'<article class="module-card"><div class="module-empty">No draft reports awaiting result entry.</div></article>`}
     function rkResultEditor(report){const p=rkPatient(report.patientId)||{},testOptions=report.tests.map(t=>`<option>${esc(t)}</option>`).join('');document.getElementById('rkResultWorkspace').innerHTML=`<div class="module-head"><div><p class="eyebrow">Draft ${esc(report.reportNo)}</p><h2>Enter results · ${esc(p.name||'Patient')}</h2></div><div class="rk-actions"><button class="secondary" id="rkBackDrafts">Back to drafts</button><button class="secondary" id="rkSaveDraft">Save draft</button><button class="primary" id="rkFinalise">Finalise report</button></div></div><article class="module-card"><form class="module-form" id="rkResultForm"><label>Investigation<select name="test">${testOptions}</select></label><label>Observed value<input required name="value" value="${esc(report.value||'')}" placeholder="Enter result"></label><label>Units<input name="units" value="${esc(report.units||'')}" placeholder="e.g. mg/dL"></label><label>Reference range<input name="range" value="${esc(report.range||'')}" placeholder="e.g. 70 - 110"></label><label class="wide">Laboratory notes<textarea name="notes" rows="4" placeholder="Clinical or method note">${esc(report.notes||'')}</textarea></label></form></article>`;function save(status){const form=new FormData(document.getElementById('rkResultForm'));report.test=form.get('test');report.value=form.get('value');report.units=form.get('units');report.range=form.get('range');report.notes=form.get('notes');if(status==='Final'){report.status='Final';report.reportedOn=rkDate()}rkPersist();showToast(status==='Final'?'Report finalised and ready for printing.':'Draft saved.');status==='Final'?rkGo('reportsflow'):rkGo('resultflow')}document.getElementById('rkBackDrafts').onclick=()=>rkGo('resultflow');document.getElementById('rkSaveDraft').onclick=()=>save('Draft');document.getElementById('rkFinalise').onclick=()=>save('Final')}
@@ -324,7 +345,7 @@
 
       const nav = document.querySelector('.nav');
       const labelMap = { intake:'patients', catalogue:'newreport', results:'results', reports:'reports', feedback:'billing', settings:'profile' };
-      Object.keys(labelMap).forEach(function (oldKey) { const button = nav.querySelector('[data-nav="' + oldKey + '"]'); if (button) { button.dataset.nav = labelMap[oldKey]; button.querySelector('span').textContent = ({patients:'Patients',newreport:'New Report',results:'Result Entry',reports:'Reports',billing:'Billing',profile:'Lab Profile'})[labelMap[oldKey]]; } });
+      Object.keys(labelMap).forEach(function (oldKey) { const button = nav.querySelector('[data-nav="' + oldKey + '"]'); if (button) { button.dataset.nav = labelMap[oldKey]; button.querySelector('span').textContent = ({patients:'Patients & Registration',newreport:'New Report',results:'Result Entry',reports:'Reports',billing:'Billing',profile:'Lab Profile'})[labelMap[oldKey]]; } });
       if (!nav.querySelector('[data-nav="doctors"]')) { const b = document.createElement('button'); b.dataset.nav = 'doctors'; b.innerHTML = '<i>♙</i><span>Doctors</span>'; nav.appendChild(b); }
       if (!nav.querySelector('[data-nav="tests"]')) { const b = document.createElement('button'); b.dataset.nav = 'tests'; b.innerHTML = '<i>⚗</i><span>Test Catalogue</span>'; nav.appendChild(b); }
       if (!nav.querySelector('[data-nav="business"]')) { const b = document.createElement('button'); b.dataset.nav = 'business'; b.innerHTML = '<i>₹</i><span>Business Report</span>'; nav.appendChild(b); }
@@ -383,7 +404,7 @@
         document.getElementById('rkTestRows').innerHTML = rk.tests.length ? rk.tests.map(function (test, index) { return '<tr><td><b>' + safe(test.name) + '</b></td><td><input data-test-category="' + index + '" aria-label="Category for ' + safe(test.name) + '" value="' + safe(test.category || '') + '"></td><td>' + safe(test.units || '—') + '</td><td><textarea data-test-range="' + index + '" aria-label="Reference range for ' + safe(test.name) + '" rows="3">' + safe(test.range || '') + '</textarea>' + (test.rangeSuggested ? '<br><small>Suggested; validate for your lab</small>' : '') + '</td><td><input type="number" min="0" step="0.01" aria-label="Rate for ' + safe(test.name) + '" data-test-rate="' + index + '" value="' + safe(test.rate == null ? '' : test.rate) + '" placeholder="Not set" style="width:90px"></td><td><button type="button" class="outline-btn" data-save-rate="' + index + '">Save changes</button></td></tr>'; }).join('') : '<tr><td colspan="6">No custom laboratory tests saved yet.</td></tr>';
         const patientQuery = document.getElementById('rkPatientSearch').value.trim().toLowerCase();
         const matchingPatients = rk.patients.filter(function (p) { return String(p.id || '').toLowerCase().includes(patientQuery) || String(p.name || '').toLowerCase().includes(patientQuery); });
-        document.getElementById('rkPatientRows2').innerHTML = matchingPatients.length ? matchingPatients.map(function (p) { return '<tr><td><b>' + safe(p.id) + '</b></td><td>' + safe(p.name) + '</td><td>' + safe(patientAge(p)) + ' / ' + safe(p.gender) + '</td><td>' + safe(p.mobile) + '</td><td>' + safe(p.reference) + '</td><td><button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(p.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(p.id) + '">New report</button></td></tr>'; }).join('') : '<tr><td colspan="6">' + (patientQuery ? 'No patients match this ID or name.' : 'No patients registered yet.') + '</td></tr>';
+        document.getElementById('rkPatientRows2').innerHTML = matchingPatients.length ? matchingPatients.map(function (p) { return '<tr><td><b>' + safe(p.id) + '</b></td><td>' + safe(p.name) + '</td><td>' + safe(patientAge(p)) + ' / ' + safe(p.gender) + '</td><td>' + safe(p.mobile) + '</td><td>' + safe(p.reference) + '</td><td><button class="outline-btn" data-sangam-edit-patient="' + safe(p.id) + '">Edit</button> <button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(p.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(p.id) + '">New report</button></td></tr>'; }).join('') : '<tr><td colspan="6">' + (patientQuery ? 'No patients match this ID or name.' : 'No patients registered yet.') + '</td></tr>';
         const drafts = rk.reports.filter(function (r) { return r.status !== 'Final'; });
         document.getElementById('rkResultsArea').innerHTML = drafts.length ? drafts.map(function (r) { const p = findPatient(r.patientId) || {}; const entries = r.tests.map(function (t) { const result = reportResult(r, t); const reference = getReference(t); const range = reportReferenceRange(r, t); const units = result.units || reference.units; return '<section class="rk-result-entry wide" data-rk-test="' + safe(t) + '"><h4>' + safe(t) + '</h4><div class="rk-form"><label>Result<input name="value" value="' + safe(result.value || '') + '" required><button class="outline-btn" type="button" data-rk-clear-result>Clear result</button></label><label>Unit<input name="units" value="' + safe(units) + '" placeholder="e.g. mg/dL"></label><label class="wide">Reference range<input name="range" value="' + safe(range) + '" aria-label="Reference range for ' + safe(t) + '"></label><p class="rk-reference-hint"><b>Suggested reference:</b> ' + safe(reference.range) + '<br><small>Source: ' + safe(reference.source) + '. Verify / replace with your laboratory-validated range before finalising.</small></p></div></section>'; }).join(''); return '<div class="rk-card"><div class="rk-topline"><div><h3>' + safe(r.reportNo) + ' · ' + safe(p.name || r.patientId) + '</h3><p>' + safe(r.tests.join(', ')) + '</p></div><span class="rk-badge">Draft</span></div><form class="rk-form" data-rk-result-form="' + safe(r.id) + '">' + entries + '<div class="wide rk-actions"><button class="outline-btn" type="submit" name="mode" value="draft" formnovalidate>Save draft</button><button class="primary-btn" type="submit" name="mode" value="final">Finalise report</button></div></form></div>'; }).join('') : '<div class="rk-card">No draft reports awaiting results.</div>';
         document.getElementById('rkReportRows2').innerHTML = rk.reports.length ? rk.reports.map(function (r) { const p = findPatient(r.patientId) || {}; const final = r.status === 'Final'; return '<tr><td><b>' + safe(r.reportNo) + '</b></td><td>' + safe(p.name || r.patientId) + '</td><td>' + safe(r.tests.join(', ')) + '</td><td>' + safe(r.createdOn) + '</td><td><span class="rk-badge ' + (final ? 'final' : '') + '">' + safe(r.status) + '</span></td><td>' + (final ? '<button class="outline-btn" data-rk-action="preview" data-report="' + safe(r.id) + '">Preview / Print</button>' : '<button class="outline-btn" data-rk-action="open-draft" data-report="' + safe(r.id) + '">Open draft / enter results</button>') + '</td></tr>'; }).join('') : '<tr><td colspan="6">No reports created yet.</td></tr>';
@@ -413,9 +434,8 @@
       /*
        * A report is organised by laboratory department.  Each department begins on
        * a fresh A4 sheet, so a combined booking remains easy to read and every
-       * printed sheet carries the complete supplied letterhead.  The sign-off
-       * markup is deliberately reused unchanged and appears only on the final
-       * sheet of the report.
+       * printed sheet carries the complete supplied letterhead. Each selected
+       * department is clearly closed with an End of Report marker on its last sheet.
        */
       function suppliedFormatMarkup(r, p) {
         const normaliseDepartment = function (test) {
@@ -444,9 +464,9 @@
         }, []);
         const pages = [];
         departmentGroups.forEach(function (group) {
-          for (let index = 0; index < group.tests.length; index += 7) pages.push({name:group.name, tests:group.tests.slice(index, index + 7), continued:index > 0});
+          for (let index = 0; index < group.tests.length; index += 7) pages.push({name:group.name, tests:group.tests.slice(index, index + 7), continued:index > 0, groupEnd:index + 7 >= group.tests.length});
         });
-        if (!pages.length) pages.push({name:'LABORATORY EXAMINATION', tests:[], continued:false});
+        if (!pages.length) pages.push({name:'LABORATORY EXAMINATION', tests:[], continued:false, groupEnd:true});
         const letterhead = '<header class="rk-letterhead"><div class="rk-reg">Reg. No. RMEE2227214</div><div class="rk-logo-box"><img src="logo.jpeg" alt="Aradhya Diagnostic"><h1><span>ARADHYA</span> DIAGNOSTIC</h1></div><div class="rk-address"><b>⌖ Khasra No.1441, Near Sheetla Mata Mandir</b><br>Opp. Vinayak Hospital, Bijnaur, Lucknow<br>☎ +91-9621204754, +91-9140091585<br>✉ aradhyadiagnostic@gmail.com</div></header>';
         const patientDetails = '<section class="rk-patient-box"><div><p><strong>Patient ID</strong>: ' + safe(p.id || '—') + '</p><p><strong>Patient Name</strong>: ' + safe(p.name || '—') + '</p><p><strong>Referred By</strong>: ' + safe(p.reference || 'Self') + '</p><p><strong>Collected By</strong>: Self</p></div><div><p><strong>Date of Collection</strong>: ' + safe(r.createdOn) + '</p><p><strong>Age / Gender</strong>: ' + safe(patientAge(p)) + ' &nbsp; / &nbsp;' + safe(p.gender || '—').toUpperCase() + '</p><p><strong>Date of Printed</strong>: ' + safe(r.reportedOn || today()) + '</p></div></section>';
         const signoff = '<div class="rk-end">End of Report</div><footer class="rk-supplied-sign"><div class="rk-tech"><div class="technician-signature-space" aria-label="Space for lab technician signature"></div><b>Laboratory Technicians</b><br><strong>Indresh Yadav</strong><br>DMLT, X RAY (TECH)<br>Reg- UPSMF/-4779<br><strong>Miss Saumya Mishra</strong><br>DMLT<br>Reg-UPSMF/-16642<br><span class="sub">Collected Sample Received<br>Sample Processed and Reported at Aradhya Diagnostic</span></div><div><div class="rk-path"><img src="doctor-signature-transparent.png" alt="Authorised signature"><b>Pathologist</b><br><span class="doctor-title">Dr. Priyanshi</span><br>M.B.B.S., MD (PATH)</div><div class="rk-verification">Computer-generated report · Authorised signatory</div></div></footer>';
@@ -456,7 +476,10 @@
           const banner = '<div class="rk-report-banner"><span>Laboratory Examination Report</span><b>Report No. ' + safe(r.reportNo) + ' · ' + safe(r.specimen || 'Specimen not recorded') + '</b></div>';
           const table = '<table class="rk-supplied-table"><thead><tr><th>Test Description</th><th>Observe Value</th><th>Units</th><th>Biological Reference Range</th></tr></thead><tbody><tr><td colspan="4" style="padding:0;border-bottom:0"><div class="rk-department">' + safe(page.name + suffix) + '</div></td></tr>' + rows + '</tbody></table>';
           const finalPage = pageIndex === pages.length - 1;
-          return '<article class="rk-report-paper rk-supplied rk-group-page' + (finalPage ? ' rk-group-final' : '') + '" data-rk-paginated="true">' + letterhead + banner + patientDetails + table + (finalPage ? signoff : '') + '</article>';
+          const interpretation = finalPage && r.notes ? '<p class="sangam-interpretation"><b>Interpretation:</b> ' + safe(r.notes) + '</p>' : '';
+          const pageNumber = '<div class="sangam-page-number">Page ' + (pageIndex + 1) + ' of ' + pages.length + '</div>';
+          const pageSignatures = '<footer class="sangam-page-signatures"><div class="sangam-incharge-signature"><span class="sangam-signature-line" aria-label="Pathology in-charge signature"></span><b>Pathology In-charge</b><span>Signature</span></div>' + pageNumber + '<div class="sangam-doctor-signature"><span class="sangam-authorised-label">Authorised pathologist signature</span><img src="doctor-signature-transparent.png" alt="Dr. Priyanshi signature"><b>Pathologist</b><strong>Dr. Priyanshi</strong><span>MBBS, MD, PATH</span><small>Computer-generated report · Authorised signatory</small></div></footer>';
+          return '<article class="rk-report-paper rk-supplied rk-group-page' + (finalPage ? ' rk-group-final' : '') + '" data-rk-paginated="true">' + letterhead + banner + patientDetails + table + interpretation + pageSignatures + (page.groupEnd ? '<div class="rk-end">End of Report</div>' : '') + '</article>';
         }).join('');
       }
       function preview(id) {
@@ -470,7 +493,7 @@
         if (suppliedPaper && !suppliedPaper.querySelector('.rk-report-banner')) suppliedPaper.querySelector('.rk-letterhead').insertAdjacentHTML('afterend', '<div class="rk-report-banner"><span>Laboratory Examination Report</span><b>Report No. ' + safe(r.reportNo) + ' · ' + safe(r.specimen || 'Specimen not recorded') + '</b></div>');
         show('report');
       }
-      function invoice(id) { const r = findReport(id); if (!r) return; const p = findPatient(r.patientId) || {}; const invoiceNo = 'AD/INV/' + String(r.id || '').replace(/[^0-9]/g, '').padStart(4, '0'); activeInvoiceNo = invoiceNo; const fee = Number(r.fee || 0); const paid = Number(r.paid || 0); const due = Math.max(0, fee - paid); const perTest = r.tests.length ? fee / r.tests.length : fee; const items = r.tests.map(function (test, index) { const amount = Array.isArray(r.testRates) && r.testRates.length === r.tests.length ? Number(r.testRates[index]) : (index === r.tests.length - 1 ? fee - (perTest * (r.tests.length - 1)) : perTest); return '<tr><td>' + (index + 1) + '</td><td><b>' + safe(test) + '</b><br><span style="font-size:9px;color:#627372">Laboratory investigation</span></td><td>₹' + amount.toFixed(2) + '</td></tr>'; }).join(''); document.getElementById('rkInvoiceHeading').textContent = 'Invoice · ' + invoiceNo; document.getElementById('rkInvoiceArea').innerHTML = '<article class="rk-invoice"><header class="rk-invoice-head"><img src="logo.jpeg" alt="Aradhya Diagnostic"><div><h1>ARADHYA DIAGNOSTIC</h1><p>Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002</p><p>☎ +91-9621204754 &nbsp; | &nbsp; aradhyadiagnostic@gmail.com</p><p class="rk-invoice-gstin"><b>GSTIN:</b> 09DXFPK2029L1Z8</p></div><div class="rk-invoice-title"><b>TAX INVOICE</b><span>Invoice no. ' + safe(invoiceNo) + '</span><span>Date: ' + safe(r.createdOn || today()) + '</span></div></header><section class="rk-invoice-info"><div><p><strong>Patient name</strong>: ' + safe(p.name || '—') + '</p><p><strong>Patient ID</strong>: ' + safe(p.id || r.patientId) + '</p><p><strong>Age / Gender</strong>: ' + safe(patientAge(p)) + ' / ' + safe(p.gender || '—') + '</p></div><div><p><strong>Report no.</strong>: ' + safe(r.reportNo) + '</p><p><strong>Referred by</strong>: ' + safe(p.reference || 'Self') + '</p><p><strong>Payment status</strong>: <span class="rk-invoice-status ' + (due ? 'due' : 'paid') + '">' + (due ? 'PART PAYMENT / DUE' : 'PAID IN FULL') + '</span></p></div></section><table class="rk-invoice-table"><thead><tr><th>S.No.</th><th>Laboratory service / investigation</th><th>Amount</th></tr></thead><tbody>' + items + '</tbody></table><section class="rk-invoice-summary"><p><span>Subtotal</span><b>₹' + fee.toFixed(2) + '</b></p><p><span>Discount</span><b>₹0.00</b></p><p class="grand"><span>Grand total</span><span>₹' + fee.toFixed(2) + '</span></p><p><span>Received</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p></section><footer class="rk-invoice-foot"><div><b>Thank you for choosing Aradhya Diagnostic.</b><br>This is a computer-generated invoice and does not require a physical stamp.<br>Services once rendered are subject to laboratory terms and conditions.</div><div style="text-align:center"><img src="doctor-signature-transparent.png" alt="Authorised signature"><b>Authorised Signatory</b></div></footer></article>'; show('invoice'); }
+      function invoice(id) { const r = findReport(id); if (!r) return; const p = findPatient(r.patientId) || {}; const invoiceNo = 'AD/INV/' + String(r.id || '').replace(/[^0-9]/g, '').padStart(4, '0'); activeInvoiceNo = invoiceNo; const subtotal = Math.max(0, Number(r.fee || 0)); const discount = Math.max(0, Math.min(subtotal, Number(r.discount || 0))); const fee = subtotal - discount; const paid = Math.max(0, Math.min(fee, Number(r.paid || 0))); const due = Math.max(0, fee - paid); const perTest = r.tests.length ? subtotal / r.tests.length : subtotal; const items = r.tests.map(function (test, index) { const amount = Array.isArray(r.testRates) && r.testRates.length === r.tests.length ? Number(r.testRates[index]) : (index === r.tests.length - 1 ? subtotal - (perTest * (r.tests.length - 1)) : perTest); return '<tr><td>' + (index + 1) + '</td><td><b>' + safe(test) + '</b><br><span style="font-size:9px;color:#627372">Laboratory investigation</span></td><td>₹' + amount.toFixed(2) + '</td></tr>'; }).join(''); document.getElementById('rkInvoiceHeading').textContent = 'Invoice · ' + invoiceNo; document.getElementById('rkInvoiceArea').innerHTML = '<article class="rk-invoice"><header class="rk-invoice-head"><img src="logo.jpeg" alt="Aradhya Diagnostic"><div><h1>ARADHYA DIAGNOSTIC</h1><p>Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002</p><p>☎ +91-9621204754 &nbsp; | &nbsp; aradhyadiagnostic@gmail.com</p><p class="rk-invoice-gstin"><b>GSTIN:</b> 09DXFPK2029L1Z8</p></div><div class="rk-invoice-title"><b>TAX INVOICE</b><span>Invoice no. ' + safe(invoiceNo) + '</span><span>Date: ' + safe(r.createdOn || today()) + '</span></div></header><section class="rk-invoice-info"><div><p><strong>Patient name</strong>: ' + safe(p.name || '—') + '</p><p><strong>Patient ID</strong>: ' + safe(p.id || r.patientId) + '</p><p><strong>Age / Gender</strong>: ' + safe(patientAge(p)) + ' / ' + safe(p.gender || '—') + '</p></div><div><p><strong>Report no.</strong>: ' + safe(r.reportNo) + '</p><p><strong>Referred by</strong>: ' + safe(p.reference || 'Self') + '</p><p><strong>Payment status</strong>: <span class="rk-invoice-status ' + (due ? 'due' : 'paid') + '">' + (due ? 'PART PAYMENT / DUE' : 'PAID IN FULL') + '</span></p></div></section><table class="rk-invoice-table"><thead><tr><th>S.No.</th><th>Laboratory service / investigation</th><th>Amount</th></tr></thead><tbody>' + items + '</tbody></table><section class="rk-invoice-summary"><p><span>Subtotal</span><b>₹' + subtotal.toFixed(2) + '</b></p><p><span>Discount</span><b>₹' + discount.toFixed(2) + '</b></p><p class="grand"><span>Grand total</span><span>₹' + fee.toFixed(2) + '</span></p><p><span>Received</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p></section><footer class="rk-invoice-foot"><div><b>Thank you for choosing Aradhya Diagnostic.</b><br>This is a computer-generated invoice and does not require a physical stamp.<br>Services once rendered are subject to laboratory terms and conditions.</div><div style="text-align:center"><img src="doctor-signature-transparent.png" alt="Authorised signature"><b>Authorised Signatory</b></div></footer></article>'; show('invoice'); }
       
       
       
@@ -486,7 +509,6 @@
       const sampleButton = document.querySelector('.report-card .print');
       if (sampleButton) { sampleButton.classList.remove('print'); sampleButton.textContent = 'View reports'; sampleButton.onclick = function () { show('reports'); }; }
       nav.addEventListener('click', function (event) { const b = event.target.closest('button[data-nav]'); if (!b) return; const key = b.dataset.nav; if (['dashboard','patients','newreport','tests','results','reports','billing','business','doctors','profile'].indexOf(key) !== -1) { event.preventDefault(); event.stopImmediatePropagation(); show(key); } }, true);
-      document.getElementById('newPatient').onclick = function () { show('patients'); window.setTimeout(function () { document.querySelector('#rkPatientForm2 input[name="name"]').focus(); }, 0); };
       document.getElementById('viewAll').onclick = function () { show('patients'); };
       document.getElementById('patientForm').onsubmit = function (event) { event.preventDefault(); const f = new FormData(event.currentTarget); const p = addPatient({name:f.get('name'),title:f.get('title'),age:f.get('age'),ageUnit:f.get('ageUnit'),gender:f.get('gender'),mobile:f.get('phone'),reference:f.get('referral'),address:''}); event.currentTarget.reset(); if (typeof closeModal === 'function') closeModal(); render(); show('patients'); toast('Patient ' + p.id + ' saved.'); };
       host.addEventListener('click', function (event) { const b = event.target.closest('[data-rk-action]'); if (!b) return; const action = b.dataset.rkAction; if (action === 'focus-patient') document.querySelector('#rkPatientForm2 input[name="name"]').focus(); if (action === 'patient-history') patientHistory(b.dataset.patient); if (action === 'back-patients') show('patients'); if (action === 'open-draft') { show('results'); const form = Array.from(document.querySelectorAll('[data-rk-result-form]')).find(function (item) { return item.dataset.rkResultForm === b.dataset.report; }); if (form) form.scrollIntoView({block:'start'}); } if (action === 'new-for-patient') { document.getElementById('rkReportForm2').reset(); show('newreport'); document.getElementById('rkPatientChoice').value = b.dataset.patient; updatePatientDetails(); } if (action === 'preview') preview(b.dataset.report); if (action === 'collect') { const r = findReport(b.dataset.report); r.paid = Number(r.fee || 0); r.paidOn = today(); save(); render(); toast('Payment recorded in full.'); } if (action === 'back-reports') show('reports'); if (action === 'print') window.print(); });
@@ -605,7 +627,7 @@
           return String(patient.id || '').toLowerCase().includes(query) || String(patient.name || '').toLowerCase().includes(query) || String(patient.mobile || '').toLowerCase().includes(query);
         });
         document.getElementById('rkPatientRows2').innerHTML = matches.length ? matches.map(function (patient) {
-          return '<tr><td><b>' + safe(patient.id) + '</b></td><td>' + safe(patient.name) + '</td><td>' + safe(patientAge(patient)) + ' / ' + safe(patient.gender) + '</td><td>' + safe(patient.mobile) + '</td><td>' + safe(patient.reference) + '</td><td><button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(patient.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(patient.id) + '">New report</button></td></tr>';
+          return '<tr><td><b>' + safe(patient.id) + '</b></td><td>' + safe(patient.name) + '</td><td>' + safe(patientAge(patient)) + ' / ' + safe(patient.gender) + '</td><td>' + safe(patient.mobile) + '</td><td>' + safe(patient.reference) + '</td><td><button class="outline-btn" data-sangam-edit-patient="' + safe(patient.id) + '">Edit</button> <button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(patient.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(patient.id) + '">New report</button></td></tr>';
         }).join('') : '<tr><td colspan="6">' + (query ? 'No patients match this name, ID or mobile number.' : 'No patients registered yet.') + '</td></tr>';
       }, true);
 
@@ -639,7 +661,7 @@
           report.paymentMode = paymentMode.value;
           options.querySelector('[data-bill="total"]').value = total.toFixed(2);
           options.querySelector('[data-bill="due"]').value = due.toFixed(2);
-          if (summary) summary.innerHTML = '<p><span>Total</span><b>₹' + total.toFixed(2) + '</b></p><p><span>Discount</span><b>₹' + appliedDiscount.toFixed(2) + '</b></p><p class="grand"><span>Net total</span><span>₹' + netTotal.toFixed(2) + '</span></p><p><span>Received · ' + safe(paymentMode.value) + '</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p>';
+          if (summary) summary.innerHTML = '<p><span>Subtotal</span><b>₹' + total.toFixed(2) + '</b></p><p><span>Discount</span><b>₹' + appliedDiscount.toFixed(2) + '</b></p><p class="grand"><span>Grand total</span><span>₹' + netTotal.toFixed(2) + '</span></p><p><span>Received</span><b>₹' + paid.toFixed(2) + '</b></p><p><span>Balance due</span><b>₹' + due.toFixed(2) + '</b></p>';
           save();
         }
         discount.value = Number(report.discount || 0).toFixed(2);
@@ -736,12 +758,12 @@
   <script id="sangam-rebrand">
   (()=>{
     const replacements=[
-      ['ARADHYA DIAGNOSTIC','NEW SANGAM DIAGNOSTIC CENTRE'],['Aradhya Diagnostic','New Sangam Diagnostic Centre'],['ARADHYA','SANGAM'],['Aradhya','Sangam'],
+      ['ARADHYA DIAGNOSTIC','SANGAM DIAGNOSIS CENTER'],['Aradhya Diagnostic','Sangam Diagnosis Center'],['ARADHYA','SANGAM DIAGNOSIS'],['Aradhya','Sangam Diagnosis'],['Diagnostic Suite','Center'],
       ['CMEE25140880','CMEE25136741'],['RMEE2227214','RMEE2444161'],['AD/INV/','SD/INV/'],['AD-','SD-'],
       ['Khasra No. 1441, Near Sheetla Mata Mandir, Opp. Vinayak Hospital, Bijnaur, Lucknow - 226002','TCV Shop No. 63, Opp. RML Hospital, Vibhuti Khand, Gomti Nagar, Lucknow - 226010'],
       ['Khasra No.1441, Near Sheetla Mata Mandir','TCV Shop No. 63, Opp. RML Hospital'],['Opp. Vinayak Hospital, Bijnaur, Lucknow','Vibhuti Khand, Gomti Nagar, Lucknow'],
       ['+91-9621204754, +91-9140091585','0522-3189685, 9452679795'],['+91-9621204754','0522-3189685'],['+91-9140091585','9452679795'],['aradhyadiagnostic@gmail.com','newsangam072@gmail.com'],
-      ['Dr. Priyanshi','Dr. Arun Kumar Srivastava'],['MBBS, MD (Pathology)','MBBS'],['M.B.B.S., MD (PATH)','MBBS'],['Reg. No. 91862','Reg. No. 31854'],
+      ['Dr. Priyanshi','Dr. Abha Mishra'],['MBBS, MD (Pathology)','MBBS'],['M.B.B.S., MD (PATH)','MBBS'],['Reg. No. 91862','Reg. No. 31854'],
       ['Valid through 13 Nov 2030','Valid through 03 Sep 2030'],['Good morning, Indresh.','Good morning, Sangam team.'],['Indresh Yadav','Laboratory Team'],['Miss Saumya Mishra','Laboratory Team'],['Aradhya@2026','Sangam@2026']
     ];
     const replace=(value)=>{let next=String(value);for(const [from,to] of replacements)next=next.split(from).join(to);return next};
@@ -749,17 +771,18 @@
     const refresh=(root=document.body)=>{updateNode(root);const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let node;while(node=walker.nextNode())updateNode(node);root.querySelectorAll?.('*').forEach(updateNode)};
     let refreshQueued=false;const observer=new MutationObserver(()=>{if(refreshQueued)return;refreshQueued=true;requestAnimationFrame(()=>{refreshQueued=false;refresh(document.body)})});
     refresh();observer.observe(document.body,{childList:true,subtree:true});
-    document.title='Sangam Diagnostic Centre | Lab Operations';
+    document.title='Sangam Diagnosis Center | Lab Operations';
     let dashboardDate='';
     const updateDashboardDate=()=>{
       const dateChip=document.querySelector('.date-chip');
       if(!dateChip)return;
-      const current=new Intl.DateTimeFormat('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kolkata'}).format(new Date());
-      if(current!==dashboardDate){dashboardDate=current;dateChip.textContent=current;}
+      const current=new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Kolkata'}).format(new Date());
+      if(current!==dashboardDate){dashboardDate=current;dateChip.setAttribute('aria-label','Today, '+current);dateChip.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><path d="M7.5 3v4M16.5 3v4M3.5 10h17"></path></svg><span>'+current+'</span>';}
     };
+    const dateChipStyle=document.createElement('style');dateChipStyle.textContent='.app .topbar .date-chip{display:inline-flex!important;align-items:center!important;gap:10px!important;padding:9px 16px!important;border:1px solid #dfe3ea!important;border-radius:14px!important;background:#fff!important;color:#344154!important;font:700 14px/1 Arial,Helvetica,sans-serif!important;box-shadow:0 2px 6px rgba(32,48,72,.06)!important}.app .topbar .date-chip svg{width:18px!important;height:18px!important;fill:none!important;stroke:#53627a!important;stroke-linecap:round!important;stroke-linejoin:round!important;stroke-width:1.8!important}.app .topbar .date-chip span{display:block!important;white-space:nowrap!important}';document.head.appendChild(dateChipStyle);
     updateDashboardDate();
     window.setInterval(updateDashboardDate,60000);
-    const enrichProfile=()=>{const profile=[...document.querySelectorAll('.module-page')].find(p=>p.dataset.module==='profile');if(profile&&!profile.querySelector('.sangam-certificate'))profile.querySelector('.module-card')?.insertAdjacentHTML('beforeend','<div class="sangam-certificate"><strong>Medical establishment information</strong><br>Certificate No. CMEE25136741 · Registration No. RMEE2444161<br>Validity: 04 Sep 2025 to 03 Sep 2030<br>Owner: Raj Kumar Shukla · In-charge: Dr. Arun Kumar Srivastava, MBBS · Reg. No. 31854</div>')};
+    const enrichProfile=()=>{const profile=[...document.querySelectorAll('.module-page')].find(p=>p.dataset.module==='profile');if(profile&&!profile.querySelector('.sangam-certificate'))profile.querySelector('.module-card')?.insertAdjacentHTML('beforeend','<div class="sangam-certificate"><strong>Medical establishment information</strong><br>Certificate No. CMEE25136741 · Registration No. RMEE2444161<br>Validity: 04 Sep 2025 to 03 Sep 2030<br>Owner: Raj Kumar Shukla · In-charge: Dr. Abha Mishra, MBBS · Reg. No. 31854</div>')};
     enrichProfile();setTimeout(enrichProfile,50);
   })();
   </script>
@@ -846,6 +869,7 @@
   <script src="sangam-workflow-sync.js"></script>
   <script src="sangam-parity.js?v=profiles-1"></script>
   <script src="sangam-catalogue.js"></script>
+  <script src="sangam-price-catalogue.js"></script>
   <style id="sangam-logo-theme">
     /* New Sangam Diagnostic Centre: supplied SD mark and its yellow/red/black palette. */
     :root{--ink:#171717;--muted:#625622;--line:#ead17a;--panel:#fffef9;--teal:#d90927;--teal-dark:#940018;--mint:#fff3b5;--orange:#ffd300;--red:#d90927;--bg:#fff8d9;--shadow:0 12px 35px rgba(32,26,8,.12)}
@@ -855,6 +879,7 @@
     .brand:before,.login-brand:before{display:none!important}
     .brand img,.login-brand img,.report-brand img,.rk-logo-box img,.rk-invoice-head img{display:block!important;object-fit:contain!important;background:#ffd300!important;border:0!important;box-shadow:0 2px 8px rgba(0,0,0,.18)!important}
     .brand img{width:46px!important;height:46px!important;border-radius:10px!important}.login-brand img{width:62px!important;height:62px!important;border-radius:12px!important}.report-brand img{width:32px!important;height:32px!important;border-radius:7px!important}.rk-invoice-head img{width:46px!important;height:46px!important;border-radius:50%!important}
+    .sidebar .brand b,.sidebar .brand span{display:block!important;margin:0!important;color:#fff!important;font:800 15px/1.12 Arial,Helvetica,sans-serif!important;letter-spacing:.025em!important;text-transform:uppercase!important}
     .login-screen{background:radial-gradient(circle at 84% 10%,rgba(255,211,0,.42),transparent 25%),linear-gradient(135deg,#fffbe9,#ffe17a)!important}.login-shell{border:1px solid #e9be15!important;box-shadow:0 24px 58px rgba(76,50,0,.24)!important}.login-aside{background:linear-gradient(145deg,#ffd300,#f2ba00)!important;color:#111!important}.login-aside:after{border-color:rgba(209,0,31,.2)!important}.login-aside h1,.login-brand b{color:#111!important}.login-aside p,.login-brand span,.login-points{color:#3b2b00!important}.login-points span:before{background:#d90927!important;color:#fff!important}.login-panel{background:#fffef9!important}.login-field label{color:#352c0b!important}.login-field input:focus{border-color:#d90927!important;box-shadow:0 0 0 3px #ffe89a!important}.login-help{color:#78632a!important}
     .primary,.primary-btn{background:#d90927!important;color:#fff!important;box-shadow:0 4px 12px rgba(217,9,39,.24)!important}.primary:hover,.primary-btn:hover{background:#940018!important}.secondary,.outline-btn{background:#fff3b5!important;color:#211a00!important;border:1px solid #e8c438!important}.secondary:hover,.outline-btn:hover{background:#ffd300!important}
     .topbar .date-chip{background:#fffef6!important;border-color:#e8cf75!important}.avatar,.stat-icon,.mini{background:#fff3b5!important;color:#c40020!important}.intro{background:linear-gradient(110deg,#151515,#29240e)!important;border-left:5px solid #ffd300!important}.intro p,.welcome-meta span{color:#fff0a9!important}.intro:after{border-color:rgba(255,211,0,.14)!important}.stat,.card,.module-card,.rk-card{border-color:#ecd677!important;box-shadow:0 4px 17px rgba(69,48,2,.06)!important}.card-head a,.cert-note b{color:#c40020!important}.bar{background:#fff0ad!important}.bar i{background:linear-gradient(90deg,#d90927,#ffd300)!important}.count{background:#fff0b5!important;color:#9d0019!important}.done{background:#fff0b5!important;color:#9d0019!important}.progress{background:#fff6d8!important;color:#8a6200!important}.pending{background:#ffe3e8!important;color:#9d0019!important}
@@ -1196,15 +1221,17 @@
       };
       const loginPanel = document.querySelector('.login-panel');
       if (loginPanel && !loginPanel.querySelector('.aarnex-credit')) loginPanel.appendChild(createCredit('login'));
-      const actions = document.querySelector('.top-actions');
-      if (actions && !actions.querySelector('.aarnex-credit')) actions.prepend(createCredit('workspace'));
+      const dashboardSidebar = document.querySelector('.sidebar');
+      if (dashboardSidebar && !dashboardSidebar.querySelector('.aarnex-credit--sidebar')) {
+        dashboardSidebar.appendChild(createCredit('sidebar'));
+      }
     })();
   </script>
   <style id="aarnex-credit-style">
-    /* A compact inline attribution in the same header position as the supplied reference. */
+    /* Keep the dashboard attribution with the fixed sidebar licence details. */
     .aarnex-credit{display:flex;align-items:center;gap:7px;box-sizing:border-box;color:#334b4a;white-space:nowrap}.aarnex-credit-copy{display:block;text-align:right;color:#466c69;font-size:11px;font-weight:700;line-height:1.25;letter-spacing:.01em}.aarnex-logo-frame{display:block;width:78px;height:31px;overflow:hidden;border-radius:5px;background:#0b1b32;box-shadow:0 2px 7px rgba(8,26,48,.18)}.aarnex-credit img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 50%;transform:scale(1.48)}
-    .aarnex-credit--workspace{margin-right:2px;padding-right:10px;border-right:1px solid #e5d27e}.aarnex-credit--login{position:absolute;top:18px;right:22px}.login-panel{position:relative!important}
-    @media (max-width:900px){.aarnex-credit--workspace{display:none!important}}
+    .sidebar-utilities{width:100%;margin-top:auto}.sidebar .logout{width:100%;display:block;background:#fff3b5!important;color:#211a00!important;border:1px solid #e8c438!important;font-weight:800!important}.aarnex-credit--sidebar{width:100%;flex:0 0 auto;justify-content:center;margin:10px 0 2px;padding:0 2px}.sidebar .aarnex-credit--sidebar .aarnex-credit-copy{color:#ffe889;font-size:10px;text-align:left}.sidebar .aarnex-credit--sidebar .aarnex-logo-frame{width:84px;height:33px}.aarnex-credit--login{position:absolute;top:18px;right:22px}.login-panel{position:relative!important}
+    @media (max-width:1050px){.sidebar-utilities,.aarnex-credit--sidebar{display:none!important}}
     @media (max-width:720px){.aarnex-credit--login{top:10px;right:12px;gap:5px}.aarnex-credit-copy{font-size:9px}.aarnex-logo-frame{width:60px;height:24px}}
     @media print{.aarnex-credit{display:none!important}}
   </style>
@@ -1239,7 +1266,8 @@
         const highestSequence = state.reports.reduce((highest, report) => Math.max(highest, Number((String(report.reportNo || '').match(/(\d+)$/) || [])[1]) || 0), 0);
         const sequence = highestSequence + 1;
         const now = new Date();
-        const createdOn = new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Asia/Kolkata' }).format(now);
+        const selectedDate = String(values.get('collectedOn') || '');
+        const createdOn = /^\d{4}-\d{2}-\d{2}$/.test(selectedDate) ? selectedDate.split('-').reverse().join('/') : new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Asia/Kolkata' }).format(now);
         const report = {
           id: 'REP-' + now.getTime(), reportNo: 'SD-R-' + String(sequence).padStart(4, '0'),
           patientId, specimen: String(values.get('specimen') || 'Blood'), tests, testRates: rates,
@@ -1278,74 +1306,145 @@
     }
     .rk-invoice-gstin { font-weight:700 !important; letter-spacing:.03em; }
   </style>
-  <script id="sangam-range-flags">
+  <style id="sangam-reference-report-typography">
+    /* Typography and clinical table treatment aligned with the supplied report reference. */
+    .rk-report-paper.rk-supplied,
+    .rk-report-paper.rk-supplied .rk-patient-box,
+    .rk-report-paper.rk-supplied .rk-supplied-table,
+    .rk-report-paper.rk-supplied .rk-supplied-sign {
+      font-family: Arial, Helvetica, sans-serif !important;
+      color: #090909 !important;
+    }
+    .rk-report-paper.rk-supplied .rk-patient-box {
+      border: 1px solid #202020 !important;
+      border-radius: 0 !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      line-height: 1.48 !important;
+    }
+    .rk-report-paper.rk-supplied .rk-patient-box strong {
+      color: #090909 !important;
+      font-size: 10.5px !important;
+      font-weight: 700 !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+    }
+    .rk-report-paper.rk-supplied .rk-report-banner {
+      justify-content: center !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #090909 !important;
+      font: 700 13px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: 0 !important;
+      text-decoration: underline !important;
+    }
+    .rk-report-paper.rk-supplied .rk-report-banner b { display: none !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table {
+      font-size: 10.5px !important;
+      line-height: 1.35 !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table th {
+      padding: 6px 8px !important;
+      border: 0 !important;
+      background: transparent !important;
+      color: #090909 !important;
+      font: 700 10.5px/1.25 Arial, Helvetica, sans-serif !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td {
+      padding: 5px 8px !important;
+      border: 0 !important;
+      color: #090909 !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table tbody tr:not(:has(.rk-department)):nth-child(even) { background: transparent !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table .test-name { font-size: 10.5px !important; color: #090909 !important; }
+    .rk-report-paper.rk-supplied .rk-method { margin-top: 1px !important; color: #151515 !important; font-size: 8.5px !important; }
+    .rk-report-paper.rk-supplied .rk-department {
+      margin: 8px 20% !important;
+      padding: 0 0 2px !important;
+      border: 0 !important;
+      border-bottom: 1px solid #090909 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #090909 !important;
+      font: 700 12px/1.25 Arial, Helvetica, sans-serif !important;
+      letter-spacing: 0 !important;
+      text-decoration: none !important;
+    }
+    .rk-report-paper.rk-supplied .rk-end {
+      display:flex !important;
+      align-items:center !important;
+      gap:9px !important;
+      margin:5mm 0 0 !important;
+      color:#5f7090 !important;
+      font:700 8px/1 Arial, Helvetica, sans-serif !important;
+      letter-spacing:.8px !important;
+      text-align:center !important;
+      text-transform:uppercase !important;
+      white-space:nowrap !important;
+    }
+    .rk-report-paper.rk-supplied .rk-end:before,
+    .rk-report-paper.rk-supplied .rk-end:after { content:"" !important; display:block !important; flex:1 1 auto !important; border-top:1px dotted #7787a1 !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-sign,
+    .rk-report-paper.rk-supplied .rk-tech b,
+    .rk-report-paper.rk-supplied .rk-path b { color: #090909 !important; }
+    @media print {
+      .rk-report-paper.rk-supplied .rk-patient-box { font-size: 9.5px !important; }
+      .rk-report-paper.rk-supplied .rk-patient-box strong { font-size: 9.5px !important; }
+      .rk-report-paper.rk-supplied .rk-supplied-table { font-size: 9.5px !important; line-height: 1.28 !important; }
+      .rk-report-paper.rk-supplied .rk-supplied-table th { font-size: 9.5px !important; padding: 4px 5px !important; }
+      .rk-report-paper.rk-supplied .rk-supplied-table td { padding: 3px 5px !important; }
+      .rk-report-paper.rk-supplied .rk-supplied-table .test-name { font-size: 9.5px !important; }
+      .rk-report-paper.rk-supplied .rk-method { font-size: 7.5px !important; }
+      .rk-report-paper.rk-supplied .rk-department { font-size: 10.5px !important; }
+    }
+  </style>
+  <style id="sangam-result-status-style">
+    .rk-report-paper.rk-supplied .rk-supplied-table td.sangam-result-abnormal,
+    input.sangam-result-abnormal { font-family: Arial, Helvetica, sans-serif !important; font-weight: 700 !important; }
+  </style>
+  <script id="sangam-result-status">
     (() => {
-      const numericValue = (value) => {
+      const numberFrom = (value) => {
         const match = String(value || '').trim().replace(',', '.').match(/^-?\d+(?:\.\d+)?/);
         return match ? Number(match[0]) : null;
       };
-      const flagFor = (value, range) => {
-        const observed = numericValue(value);
+      const statusFor = (value, range) => {
+        const observed = numberFrom(value);
         if (observed === null) return '';
-        const text = String(range || '');
-        const decimal = '(-?\\d+(?:\\.\\d+)?)';
-        const interval = new RegExp(`${decimal}\\s*(?:-|–|to)\\s*${decimal}`, 'i').exec(text);
-        if (interval) {
-          if (observed < Number(interval[1])) return 'Low';
-          if (observed > Number(interval[2])) return 'High';
-          return '';
-        }
-        const upper = new RegExp(`(?:<|less than|below|up to|<=|≤)\\s*${decimal}`, 'i').exec(text);
-        if (upper && observed > Number(upper[1])) return 'High';
-        const lower = new RegExp(`(?:>|more than|above|at least|>=|≥)\\s*${decimal}`, 'i').exec(text);
-        if (lower && observed < Number(lower[1])) return 'Low';
-        return '';
+        const numeric = '(-?\\d+(?:\\.\\d+)?)';
+        const interval = new RegExp(`${numeric}\\s*(?:-|–|to)\\s*${numeric}`, 'i').exec(String(range || ''));
+        if (interval) return observed < Number(interval[1]) ? 'low' : observed > Number(interval[2]) ? 'high' : '';
+        const upper = new RegExp(`(?:<|less than|below|up to|<=|≤)\\s*${numeric}`, 'i').exec(String(range || ''));
+        if (upper && observed > Number(upper[1])) return 'high';
+        const lower = new RegExp(`(?:>|more than|above|at least|>=|≥)\\s*${numeric}`, 'i').exec(String(range || ''));
+        return lower && observed < Number(lower[1]) ? 'low' : '';
       };
-      const setEntryFlag = (entry) => {
-        const valueInput = entry.querySelector('[name="value"]');
-        const rangeInput = entry.querySelector('[name="range"]');
-        const flag = flagFor(valueInput?.value, rangeInput?.value);
-        let badge = entry.querySelector('.sangam-range-flag');
-        if (!flag) { badge?.remove(); return; }
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.className = 'sangam-range-flag';
-          valueInput.insertAdjacentElement('afterend', badge);
-        }
-        const className = `sangam-range-flag ${flag.toLowerCase()}`;
-        if (badge.className !== className) badge.className = className;
-        if (badge.textContent !== flag) badge.textContent = flag;
+      const setStatus = (container, status, valueElement = container) => {
+        valueElement.classList.toggle('sangam-result-abnormal', Boolean(status));
+        valueElement.classList.toggle('sangam-result-high', status === 'high');
+        valueElement.classList.toggle('sangam-result-low', status === 'low');
+        valueElement.classList.toggle('sangam-result-normal', !status);
+        container.querySelector(':scope > .sangam-result-status')?.remove();
       };
-      const addReportFlags = () => {
-        document.querySelectorAll('#rkPrintArea tr').forEach((row) => {
-          const cells = row.querySelectorAll('td');
-          if (cells.length < 4 || row.querySelector('.sangam-range-flag')) return;
-          const flag = flagFor(cells[1].textContent, cells[3].textContent);
-          if (!flag) return;
-          const badge = document.createElement('span');
-          badge.className = `sangam-range-flag ${flag.toLowerCase()}`;
-          badge.textContent = flag;
-          cells[1].appendChild(document.createElement('br'));
-          cells[1].appendChild(badge);
-        });
-      };
-      const style = document.createElement('style');
-      style.textContent = '.sangam-range-flag{display:inline-block;margin:5px 0 0;padding:3px 7px;border-radius:999px;font:800 10px/1 Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase}.sangam-range-flag.high{background:#ffe3e0;color:#a5271c;border:1px solid #f3bbb4}.sangam-range-flag.low{background:#e9efff;color:#2456a3;border:1px solid #c5d6ff}#rkPrintArea .sangam-range-flag{margin:4px 0 0;font-size:8px}';
-      document.head.appendChild(style);
-      document.addEventListener('input', (event) => {
-        const entry = event.target.closest?.('[data-rk-test], [data-sangam-result-test]');
-        if (entry && (event.target.name === 'value' || event.target.name === 'range')) setEntryFlag(entry);
+      const markReportValues = () => document.querySelectorAll('#rkPrintArea .rk-supplied-table tr, #rkPrintArea .sangam-result-table tr').forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 4) return;
+        setStatus(cells[1], statusFor(cells[1].textContent, cells[3].textContent));
       });
-      const printArea = document.getElementById('rkPrintArea');
-      if (printArea) new MutationObserver(addReportFlags).observe(printArea, { childList: true, subtree: true });
-      const resultsArea = document.getElementById('rkResultsArea');
-      if (resultsArea) new MutationObserver(() => resultsArea.querySelectorAll('[data-rk-test], [data-sangam-result-test]').forEach(setEntryFlag)).observe(resultsArea, { childList: true, subtree: true });
-      new MutationObserver(() => {
-        document.querySelectorAll('[data-rk-test], [data-sangam-result-test]').forEach(setEntryFlag);
-        addReportFlags();
-      }).observe(document.body, { childList: true, subtree: true });
-      document.querySelectorAll('[data-rk-test], [data-sangam-result-test]').forEach(setEntryFlag);
-      addReportFlags();
+      const markEntryValues = () => document.querySelectorAll('[data-rk-test], [data-sangam-result-test]').forEach((row) => {
+        const value = row.querySelector('[name="value"]');
+        const range = row.querySelector('[name="range"]');
+        if (value) setStatus(value.parentElement, statusFor(value.value, range?.value), value);
+      });
+      const refresh = () => { markReportValues(); markEntryValues(); };
+      document.addEventListener('input', (event) => {
+        if (event.target.name === 'value' || event.target.name === 'range') refresh();
+      });
+      new MutationObserver(() => window.requestAnimationFrame(refresh)).observe(document.body, { childList: true, subtree: true });
+      refresh();
     })();
   </script>
   <style id="sangam-department-page-layout">
@@ -1379,7 +1478,7 @@
       left: 12mm !important;
       margin: 0 !important;
     }
-    #rkPrintArea .rk-group-page.rk-group-final .rk-end {
+    #rkPrintArea .rk-group-page .rk-end {
       position: absolute !important;
       right: 12mm !important;
       bottom: 69mm !important;
@@ -1404,5 +1503,542 @@
       }
     }
   </style>
+  <script id="sangam-edit-records">
+    (() => {
+      const storageKey = 'sangamRkWorkflow';
+      const read = () => { try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) { return {}; } };
+      const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
+      const updateButtons = () => {
+        const state = read();
+        document.querySelectorAll('#rkPatientRows2 tr').forEach((row) => {
+          const id = row.cells?.[0]?.textContent.trim(); const patient = state.patients?.find((item) => item.id === id); const cell = row.lastElementChild;
+          if (patient && cell && !cell.querySelector('[data-sangam-edit-patient]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn" data-sangam-edit-patient="' + safe(patient.id) + '">Edit patient</button>');
+        });
+        document.querySelectorAll('#rkReportRows2 tr').forEach((row) => {
+          const number = row.cells?.[0]?.textContent.trim(); const report = state.reports?.find((item) => item.reportNo === number); const cell = row.lastElementChild;
+          if (report && cell && !cell.querySelector('[data-sangam-edit-report]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn" data-sangam-edit-report="' + safe(report.id) + '">Edit report</button>');
+        });
+        document.querySelectorAll('[data-sangam-result-form]').forEach((form) => {
+          const report = state.reports?.find((item) => item.id === form.dataset.sangamResultForm); const header = form.closest('.sangam-result-card')?.querySelector('.sangam-result-head');
+          if (report && header && !header.querySelector('[data-sangam-edit-report]')) header.insertAdjacentHTML('beforeend', '<button type="button" class="outline-btn sangam-edit-draft" data-sangam-edit-report="' + safe(report.id) + '">Edit report details</button>');
+        });
+      };
+      const close = () => document.getElementById('sangamEditDialog')?.remove();
+      const open = (title, body, save) => {
+        close();
+        const dialog = document.createElement('div'); dialog.id = 'sangamEditDialog';
+        dialog.innerHTML = '<div class="sangam-edit-card"><div class="sangam-edit-head"><h2>' + title + '</h2><button type="button" class="outline-btn" data-sangam-close>Edit later</button></div><form id="sangamEditForm">' + body + '<div class="sangam-edit-actions"><button type="button" class="outline-btn" data-sangam-close>Cancel</button><button class="primary-btn">Save changes</button></div></form></div>';
+        document.body.appendChild(dialog);
+        dialog.querySelector('[data-sangam-close]')?.focus();
+        dialog.addEventListener('click', (event) => { if (event.target === dialog || event.target.closest('[data-sangam-close]')) close(); });
+        dialog.querySelector('form').addEventListener('submit', (event) => { event.preventDefault(); save(new FormData(event.currentTarget)); });
+      };
+      const patientEditor = (id) => {
+        const state = read(); const patient = state.patients?.find((item) => item.id === id); if (!patient) return;
+        const select = (field, options) => '<select name="' + field + '">' + options.map((option) => '<option' + (patient[field] === option ? ' selected' : '') + '>' + safe(option) + '</option>').join('') + '</select>';
+        open('Edit patient · ' + safe(patient.id),
+          '<label>Patient name<input name="name" required value="' + safe(patient.name) + '"></label><label>Title' + select('title', ['','Mr.','Mrs.','Ms.','Master','Miss','Baby of']) + '</label><label>Age<input name="age" type="number" min="0" required value="' + safe(patient.age) + '"></label><label>Age unit' + select('ageUnit', ['years','months','weeks','days']) + '</label><label>Gender' + select('gender', ['Female','Male','Other']) + '</label><label>Mobile number<input name="mobile" value="' + safe(patient.mobile) + '"></label><label class="wide">Referred by<input name="reference" value="' + safe(patient.reference) + '"></label><label class="wide">Address<input name="address" value="' + safe(patient.address) + '"></label>',
+          (form) => { Object.assign(patient, { name:String(form.get('name')).trim(), title:String(form.get('title')).trim(), age:String(form.get('age')).trim(), ageUnit:String(form.get('ageUnit')).trim(), gender:String(form.get('gender')).trim(), mobile:String(form.get('mobile')).trim(), reference:String(form.get('reference')).trim() || 'Self', address:String(form.get('address')).trim() }); localStorage.setItem(storageKey, JSON.stringify(state)); location.reload(); }
+        );
+      };
+      const reportEditor = (id) => {
+        const state = read(); const report = state.reports?.find((item) => item.id === id); if (!report) return;
+        const patients = state.patients || [];
+        const existingResults = report.results && typeof report.results === 'object' ? report.results : {};
+        const resultFields = (report.tests || []).map((test, index) => { const saved = existingResults[test] || (report.test === test ? { value:report.value || '', units:report.units || '', range:report.range || report.referenceRange || '' } : {}); return '<fieldset class="sangam-edit-result"><legend>' + safe(test) + '</legend><label>Result<input name="resultValue' + index + '" value="' + safe(saved.value) + '"></label><label>Unit<input name="resultUnits' + index + '" value="' + safe(saved.units) + '"></label><label class="wide">Reference range<input name="resultRange' + index + '" value="' + safe(saved.range || saved.referenceRange) + '"></label></fieldset>'; }).join('');
+        open('Edit report · ' + safe(report.reportNo),
+          '<label class="wide">Patient<select name="patientId" required>' + patients.map((patient) => '<option value="' + safe(patient.id) + '"' + (patient.id === report.patientId ? ' selected' : '') + '>' + safe(patient.id + ' · ' + patient.name) + '</option>').join('') + '</select></label><label>Specimen<input name="specimen" value="' + safe(report.specimen) + '"></label><label>Collection date<input name="createdOn" value="' + safe(report.createdOn) + '" placeholder="DD/MM/YYYY"></label><label>Fee (₹)<input name="fee" type="number" min="0" step="0.01" value="' + safe(report.fee) + '"></label><label class="wide">Investigations<input name="tests" required value="' + safe((report.tests || []).join(', ')) + '"><small>Separate test names with commas. Result fields below follow the existing investigations.</small></label><section class="sangam-edit-result-list wide"><h3>Edit report results</h3><p>Correct result values, units, or reference ranges before saving.</p>' + resultFields + '</section><label class="wide">Report note<textarea name="notes" rows="3">' + safe(report.notes) + '</textarea></label>',
+          (form) => { const tests = String(form.get('tests')).split(',').map((item) => item.trim()).filter(Boolean); if (!tests.length) return; const results = {}; tests.forEach((test, index) => { const originalIndex = (report.tests || []).indexOf(test); if (originalIndex < 0) { results[test] = { value:'', units:'', range:'' }; return; } results[test] = { value:String(form.get('resultValue' + originalIndex) || '').trim(), units:String(form.get('resultUnits' + originalIndex) || '').trim(), range:String(form.get('resultRange' + originalIndex) || '').trim() }; }); const primary = results[tests[0]] || {}; Object.assign(report, { patientId:String(form.get('patientId')), specimen:String(form.get('specimen')).trim(), createdOn:String(form.get('createdOn')).trim() || report.createdOn, fee:Number(form.get('fee')) || 0, tests, results, test:tests[0], value:primary.value || '', units:primary.units || '', range:primary.range || '', notes:String(form.get('notes')).trim() }); localStorage.setItem(storageKey, JSON.stringify(state)); location.reload(); }
+        );
+      };
+      const style = document.createElement('style');
+      style.textContent = '#rkPatientRows2 button[data-sangam-edit-patient],#rkPatientRows2 button[data-rk-action="patient-history"],#rkPatientRows2 button[data-rk-action="new-for-patient"]{background:#c62828!important;color:#fff!important;border-color:#961b1b!important}#rkPatientRows2 button[data-sangam-edit-patient]:hover,#rkPatientRows2 button[data-rk-action="patient-history"]:hover,#rkPatientRows2 button[data-rk-action="new-for-patient"]:hover{background:#8e1717!important}.sangam-edit-card{width:min(650px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:12px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.28)}#sangamEditDialog{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.48)}.sangam-edit-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:15px}.sangam-edit-head h2{margin:0;font-size:19px}.sangam-edit-card form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.sangam-edit-card label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#243c39}.sangam-edit-card label.wide,.sangam-edit-actions{grid-column:1/-1}.sangam-edit-card input,.sangam-edit-card select,.sangam-edit-card textarea{width:100%;padding:9px;border:1px solid #bcd0cb;border-radius:6px;font:inherit}.sangam-edit-card small{font-weight:400;color:#61726f}.sangam-edit-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:6px}.sangam-edit-draft{margin-left:auto;align-self:flex-start;white-space:nowrap}.sangam-edit-result-list{grid-column:1/-1;padding:13px;border:1px solid #d9c96f;border-radius:8px;background:#fffdf4}.sangam-edit-result-list h3{margin:0;color:#6c5300;font-size:14px}.sangam-edit-result-list>p{margin:5px 0 11px;color:#746b55;font-size:11px}.sangam-edit-result{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 0;padding:10px;border:1px solid #eadf9d;border-radius:7px;background:#fff}.sangam-edit-result legend{padding:0 5px;color:#8f0018;font-size:12px;font-weight:800}@media(max-width:600px){.sangam-edit-card form,.sangam-edit-result{grid-template-columns:1fr}.sangam-edit-draft{margin-left:0}}';
+      document.head.appendChild(style);
+      document.addEventListener('click', (event) => { const patient = event.target.closest('[data-sangam-edit-patient]'); const report = event.target.closest('[data-sangam-edit-report]'); if (patient) patientEditor(patient.dataset.sangamEditPatient); if (report) reportEditor(report.dataset.sangamEditReport); });
+      new MutationObserver(() => window.requestAnimationFrame(updateButtons)).observe(document.body, { childList:true, subtree:true });
+      updateButtons();
+    })();
+  </script>
+  <script id="sangam-billing-workflow">
+    (() => {
+      const storageKey = 'sangamRkWorkflow';
+      const money = (value) => Number(value || 0).toFixed(2);
+      const read = () => { try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) { return {}; } };
+      const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
+      const paymentModes = ['Cash', 'UPI', 'Card', 'Net Banking', 'Other'];
+      const paymentModeFor = (report) => paymentModes.includes(report.paymentMode) ? report.paymentMode : 'Cash';
+      const page = document.querySelector('#rkWorkflow [data-rk-page="billing"]');
+      if (!page) return;
+      const render = () => {
+        const state = read(); const reports = Array.isArray(state.reports) ? state.reports : []; const patients = Array.isArray(state.patients) ? state.patients : [];
+        const balanceFor = (item) => Math.max(0, Number(item.fee || 0) - Math.max(0, Math.min(Number(item.fee || 0), Number(item.discount || 0))) - Number(item.paid || 0));
+        const activeReports = reports.filter((item) => balanceFor(item) > 0.004); const paidReports = reports.filter((item) => balanceFor(item) <= 0.004);
+        let selectedId = page.dataset.sangamBillReport || activeReports[0]?.id || ''; if (!activeReports.some((report) => report.id === selectedId)) selectedId = activeReports[0]?.id || '';
+        const report = activeReports.find((item) => item.id === selectedId); const patient = patients.find((item) => item.id === report?.patientId) || {};
+        const legacy = page.querySelector('.rk-card'); if (legacy) legacy.style.display = 'none';
+        page.querySelector('.sangam-billing-panel')?.remove();
+        const panel = document.createElement('section'); panel.className = 'sangam-billing-panel';
+        const historyMarkup = paidReports.length ? '<section class="sangam-billing-history"><header><div><h3>Bill history</h3><p>Paid bills are retained here for review and reprinting.</p></div><b>' + paidReports.length + ' paid bill' + (paidReports.length === 1 ? '' : 's') + '</b></header><div class="rk-table-wrap"><table><thead><tr><th>Report no.</th><th>Patient</th><th>Paid amount</th><th>Payment mode</th><th>Paid on</th><th>Invoice</th></tr></thead><tbody>' + paidReports.map((item) => { const person = patients.find((entry) => entry.id === item.patientId) || {}; const netTotal = Math.max(0, Number(item.fee || 0) - Math.max(0, Math.min(Number(item.fee || 0), Number(item.discount || 0)))); return '<tr><td><b>' + safe(item.reportNo || item.id) + '</b></td><td>' + safe(person.name || item.patientId) + '</td><td>₹' + money(netTotal) + '</td><td>' + safe(item.paymentMode || 'Cash') + '</td><td>' + safe(item.paidOn || '—') + '</td><td><button type="button" class="sangam-history-invoice" data-history-invoice="' + safe(item.id) + '">View / print</button></td></tr>'; }).join('') + '</tbody></table></div></section>' : '';
+        const openInvoice = (id) => { const host = document.getElementById('rkWorkflow'); if (!host) return; const bridge = document.createElement('button'); bridge.type = 'button'; bridge.hidden = true; bridge.dataset.rkAction = 'invoice'; bridge.dataset.report = id; host.appendChild(bridge); bridge.click(); bridge.remove(); };
+        const bindHistoryInvoices = () => panel.querySelectorAll('[data-history-invoice]').forEach((button) => button.addEventListener('click', () => openInvoice(button.dataset.historyInvoice)));
+        if (!report) { panel.innerHTML = '<p class="sangam-billing-empty">' + (reports.length ? 'All bills have been collected. View a previous invoice below.' : 'No reports are available for billing yet.') + '</p>' + historyMarkup; page.appendChild(panel); bindHistoryInvoices(); return; }
+        const total = Number(report.fee || 0), discount = Math.max(0, Math.min(total, Number(report.discount || 0))), net = total - discount, received = Math.max(0, Math.min(net, Number(report.paid || 0))), due = Math.max(0, net - received), paymentMode = paymentModeFor(report);
+        const options = activeReports.map((item) => { const person = patients.find((entry) => entry.id === item.patientId) || {}; const itemDue = balanceFor(item); return '<option value="' + safe(item.id) + '"' + (item.id === report.id ? ' selected' : '') + '>' + safe((person.name || item.patientId) + ' · ' + item.reportNo + ' (Total: ₹' + money(item.fee) + ', Due: ₹' + money(itemDue) + ')') + '</option>'; }).join('');
+        const paymentModeOptions = paymentModes.map((mode) => '<option' + (mode === paymentMode ? ' selected' : '') + '>' + safe(mode) + '</option>').join('');
+        panel.innerHTML = '<p class="sangam-billing-copy">Professional billing receipt for laboratory services.</p><div class="sangam-billing-card"><label class="sangam-billing-patient">Patient name<select data-bill-report>' + options + '</select></label><label class="sangam-billing-search"><span>Search</span><input data-bill-search placeholder="Filter patient / report..."></label><div class="sangam-billing-chips"><span>Patient ID: <b>' + safe(patient.id || '—') + '</b></span><span>Age / Gender: <b>' + safe((patient.age || '—') + ' Years / ' + (patient.gender || '—')) + '</b></span><span>Mobile: <b>' + safe(patient.mobile || '—') + '</b></span><span>Referred by: <b>' + safe(patient.reference || 'Self') + '</b></span><span>Report no: <b>' + safe(report.reportNo || '—') + '</b></span></div><form data-bill-form><div class="sangam-billing-fields"><label>Total<input data-bill-total readonly value="' + money(total) + '"></label><label>Discount (₹)<input data-bill-discount type="number" min="0" max="' + money(total) + '" step="0.01" value="' + money(discount) + '"></label><label>Received (₹)<input data-bill-received type="number" min="0" step="0.01" value="' + money(received) + '"></label><label>Payment mode<select data-bill-payment-mode>' + paymentModeOptions + '</select></label><label>Due (₹)<input data-bill-due readonly value="' + money(due) + '"></label></div><p class="sangam-payment-hint">Choose one payment mode and enter the amount received.</p><div class="sangam-billing-actions"><button class="sangam-billing-save">Save &amp; Collect payment</button><button type="button" class="sangam-billing-invoice" data-bill-invoice>View / Print Invoice</button></div></form></div>' + historyMarkup;
+        page.appendChild(panel);
+        const select = panel.querySelector('[data-bill-report]'), search = panel.querySelector('[data-bill-search]'), discountInput = panel.querySelector('[data-bill-discount]'), receivedInput = panel.querySelector('[data-bill-received]'), paymentModeInput = panel.querySelector('[data-bill-payment-mode]'), dueInput = panel.querySelector('[data-bill-due]');
+        const updateDue = () => { const appliedDiscount = Math.max(0, Math.min(total, Number(discountInput.value) || 0)); const netTotal = total - appliedDiscount; const paid = Math.max(0, Math.min(netTotal, Number(receivedInput.value) || 0)); receivedInput.value = money(paid); dueInput.value = money(netTotal - paid); return { appliedDiscount, paid, paymentMode: paymentModeInput.value }; };
+        select.addEventListener('change', () => { page.dataset.sangamBillReport = select.value; render(); });
+        search.addEventListener('input', () => { const query = search.value.toLowerCase(); Array.from(select.options).forEach((option) => { option.hidden = !option.textContent.toLowerCase().includes(query); }); });
+        [discountInput, receivedInput].forEach((input) => input.addEventListener('input', updateDue)); updateDue();
+        panel.querySelector('[data-bill-form]').addEventListener('submit', (event) => { event.preventDefault(); const { appliedDiscount, paid, paymentMode: selectedPaymentMode } = updateDue(); const paymentBreakdown = Object.fromEntries(paymentModes.map((mode) => [mode.toLowerCase(), mode === selectedPaymentMode ? paid : 0])); Object.assign(report, { discount: appliedDiscount, paid, paymentBreakdown, paymentMode: selectedPaymentMode, paidOn: new Date().toISOString().slice(0, 10) }); localStorage.setItem(storageKey, JSON.stringify(state)); sessionStorage.setItem('sangam-billing-refresh', report.id); location.reload(); });
+        panel.querySelector('[data-bill-invoice]').addEventListener('click', () => openInvoice(report.id)); bindHistoryInvoices();
+      };
+      const style = document.createElement('style');
+      style.textContent = '.sangam-billing-panel{margin-top:8px}.sangam-billing-copy{margin:0 0 14px;color:#51637d;font-weight:600}.sangam-billing-card{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;padding:28px;border:1px solid #d9dfe9;border-radius:15px;background:#fff;box-shadow:0 14px 35px rgba(37,70,141,.08)}.sangam-billing-card label{display:grid;gap:7px;color:#1f2937;font-size:13px;font-weight:800}.sangam-billing-card input,.sangam-billing-card select{width:100%;padding:14px 15px;border:1px solid #cfd6e0;border-radius:10px;background:#fbfcfe;color:#172033;font:600 15px Arial,sans-serif}.sangam-billing-search span{display:none}.sangam-billing-chips{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:9px;padding:0 0 18px;border-bottom:1px solid #e6eaf0}.sangam-billing-chips span{padding:8px 12px;border-radius:8px;background:#f0f3f8;color:#5b6678;font-size:12px}.sangam-billing-chips b{color:#263247}.sangam-billing-card form{grid-column:1/-1}.sangam-billing-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.sangam-billing-fields input[readonly]{background:#f5f7fa}.sangam-payment-hint{margin:12px 0 0;color:#67758a;font-size:12px}.sangam-billing-actions{display:flex;gap:14px;margin-top:18px}.sangam-billing-save,.sangam-billing-invoice,.sangam-history-invoice{padding:14px 25px;border-radius:9px;font:800 15px Arial,sans-serif;cursor:pointer}.sangam-billing-save{border:0;background:#24468d;color:#fff;box-shadow:0 7px 14px rgba(36,70,141,.22)}.sangam-billing-invoice,.sangam-history-invoice{border:1px solid #b7c1d2;background:#fff;color:#24468d}.sangam-billing-empty{padding:25px;background:#fff;border-radius:12px;color:#607087}.sangam-billing-history{margin-top:22px;padding:22px;border:1px solid #d9dfe9;border-radius:15px;background:#fff}.sangam-billing-history header{display:flex;justify-content:space-between;gap:20px;align-items:start;margin-bottom:18px}.sangam-billing-history h3{margin:0;color:#1f2937;font-size:20px}.sangam-billing-history p{margin:5px 0 0;color:#6a7689;font-size:13px}.sangam-billing-history header>b{padding:9px 12px;border:1px solid #d7dfec;border-radius:999px;background:#f4f6fa;color:#3a5487;font-size:12px}.sangam-billing-history table{width:100%;border-collapse:collapse;min-width:760px}.sangam-billing-history th{padding:14px 15px;background:#f1f4fc;border-bottom:1px solid #90a9d4;color:#4b6391;font:800 11px Arial,sans-serif;letter-spacing:.02em;text-align:left;text-transform:uppercase}.sangam-billing-history td{padding:14px 15px;border-bottom:1px solid #dce3ee;color:#415069;font-size:13px}.sangam-history-invoice{padding:8px 11px}@media(max-width:850px){.sangam-billing-card{grid-template-columns:1fr}.sangam-billing-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.sangam-billing-card{padding:18px}.sangam-billing-fields{grid-template-columns:1fr}.sangam-billing-actions{flex-direction:column}}';
+      document.head.appendChild(style); document.querySelector('.nav')?.addEventListener('click', (event) => { if (event.target.closest('button[data-nav="billing"]')) window.setTimeout(render, 0); });
+      const pending = sessionStorage.getItem('sangam-billing-refresh'); if (pending) { sessionStorage.removeItem('sangam-billing-refresh'); page.dataset.sangamBillReport = pending; document.querySelector('.nav button[data-nav="billing"]')?.click(); }
+      render();
+    })();
+  </script>
+  <script id="sangam-collection-register">
+    (() => {
+      const storageKey = 'sangamRkWorkflow';
+      const read = () => { try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) { return {}; } };
+      const money = (value) => Number(value || 0).toFixed(2);
+      const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
+      const render = () => {
+        const panel = document.querySelector('.sangam-billing-panel'); const card = panel?.querySelector('.sangam-billing-card'); if (!panel || !card || panel.querySelector('.sangam-collection-register')) return;
+        const state = read(), reports = Array.isArray(state.reports) ? state.reports : [], patients = Array.isArray(state.patients) ? state.patients : [];
+        const activeReports = reports.filter((report) => { const total = Number(report.fee || 0), discount = Math.max(0, Math.min(total, Number(report.discount || 0))); return total - discount - Number(report.paid || 0) > 0.004; });
+        const rows = activeReports.map((report) => { const patient = patients.find((item) => item.id === report.patientId) || {}; const total = Number(report.fee || 0), discount = Math.max(0, Math.min(total, Number(report.discount || 0))), net = total - discount, received = Math.max(0, Math.min(net, Number(report.paid || 0))), due = Math.max(0, net - received); return '<tr data-sangam-bill-row="' + safe(report.id) + '"><td><b>' + safe(report.reportNo) + '</b></td><td><b>' + safe(patient.name || report.patientId) + '</b></td><td>₹' + money(total) + '</td><td>' + (discount ? '₹' + money(discount) : '—') + '</td><td>₹' + money(received) + '</td><td><span class="sangam-due">₹' + money(due) + '</span></td><td>' + safe(report.paymentMode || '—') + '</td><td><button type="button" class="sangam-register-invoice" data-sangam-register-invoice="' + safe(report.id) + '">Invoice</button></td></tr>'; }).join('') || '<tr><td colspan="8">No unpaid or part-paid bills.</td></tr>';
+        const register = document.createElement('section'); register.className = 'sangam-collection-register'; register.innerHTML = '<header><div><h3>Collection register</h3><p>Only unpaid and part-paid bills are listed here. Paid bills move to Bill history.</p></div><b>' + activeReports.length + ' active bill' + (activeReports.length === 1 ? '' : 's') + '</b></header><div class="rk-table-wrap"><table><thead><tr><th>Report no.</th><th>Patient</th><th>Total billed</th><th>Discount</th><th>Received</th><th>Balance due</th><th>Payment mode</th><th>Invoice</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+        panel.insertBefore(register, panel.querySelector('.sangam-billing-history') || null);
+        register.addEventListener('click', (event) => { const invoice = event.target.closest('[data-sangam-register-invoice]'); if (invoice) { event.stopPropagation(); document.querySelector('#rkWorkflow [data-rk-page="billing"] [data-rk-action="invoice"][data-report="' + CSS.escape(invoice.dataset.sangamRegisterInvoice) + '"]')?.click(); return; } const row = event.target.closest('[data-sangam-bill-row]'); if (!row) return; const select = panel.querySelector('[data-bill-report]'); if (select) { select.value = row.dataset.sangamBillRow; select.dispatchEvent(new Event('change')); } });
+      };
+      const style = document.createElement('style'); style.textContent = '.sangam-collection-register{margin-top:22px;padding:22px;border:1px solid #d9dfe9;border-radius:15px;background:#fff}.sangam-collection-register header{display:flex;justify-content:space-between;gap:20px;align-items:start;margin-bottom:18px}.sangam-collection-register h3{margin:0;color:#1f2937;font-size:20px}.sangam-collection-register p{margin:5px 0 0;color:#6a7689;font-size:13px}.sangam-collection-register header>b{padding:9px 12px;border:1px solid #d7dfec;border-radius:999px;background:#f4f6fa;color:#3a5487;font-size:12px}.sangam-collection-register table{width:100%;border-collapse:collapse;min-width:900px}.sangam-collection-register th{padding:14px 15px;background:#f1f4fc;border-bottom:1px solid #90a9d4;color:#4b6391;font:800 11px Arial,sans-serif;letter-spacing:.02em;text-align:left;text-transform:uppercase}.sangam-collection-register td{padding:16px 15px;border-bottom:1px solid #dce3ee;color:#415069;font-size:13px}.sangam-collection-register tbody tr{cursor:pointer}.sangam-collection-register tbody tr:hover{background:#f6f9ff}.sangam-due{padding:5px 9px;border-radius:6px;background:#fff0f0;color:#c62e2e;font-weight:800}.sangam-paid{padding:5px 9px;border-radius:999px;background:#eaf8f1;color:#237b54;font-weight:800}.sangam-register-invoice{padding:8px 11px;border:1px solid #b7c1d2;border-radius:8px;background:#fff;color:#24468d;font-weight:800;cursor:pointer}'; document.head.appendChild(style);
+      new MutationObserver(() => window.requestAnimationFrame(render)).observe(document.body, { childList:true, subtree:true }); render();
+    })();
+  </script>
+  <script id="sangam-test-booking-layout">
+    (() => {
+      const page = document.querySelector('#rkWorkflow [data-rk-page="newreport"]'); const form = document.getElementById('rkReportForm2'); if (!page || !form || page.dataset.sangamBookingReady) return;
+      page.dataset.sangamBookingReady = 'true';
+      const heading = page.querySelector('.rk-topline h2'), description = page.querySelector('.rk-topline p');
+      if (heading) { heading.textContent = 'New investigation request'; heading.insertAdjacentHTML('beforebegin', '<p class="sangam-booking-kicker">Test booking</p>'); }
+      if (description) description.textContent = 'Book tests for an already registered patient.';
+      const patientLabel = form.querySelector('#rkPatientChoice')?.closest('label'), patientDetails = document.getElementById('rkSelectedPatientDetails'), specimenLabel = form.elements.specimen?.closest('label'), feeLabel = form.elements.fee?.closest('label'), picker = document.getElementById('rkTestPicker'), selectedLabel = form.elements.tests?.closest('label'), notesLabel = form.elements.notes?.closest('label'), actions = form.querySelector('.rk-actions');
+      if (!patientLabel || !specimenLabel || !picker) return;
+      const patientFieldset = document.createElement('fieldset'); patientFieldset.className = 'sangam-booking-fieldset'; patientFieldset.innerHTML = '<legend>Patient and billing</legend>';
+      const referralLabel = document.createElement('label'); referralLabel.innerHTML = 'Referred by<input data-sangam-referral readonly>';
+      const collectedLabel = document.createElement('label'); const today = new Date().toISOString().slice(0, 10); collectedLabel.innerHTML = 'Collected on<input name="collectedOn" type="date" value="' + today + '">';
+      patientLabel.classList.add('wide'); patientFieldset.append(patientLabel, referralLabel, specimenLabel, collectedLabel); patientDetails?.remove(); form.prepend(patientFieldset);
+      const testFieldset = document.createElement('fieldset'); testFieldset.className = 'sangam-booking-fieldset sangam-booking-tests'; testFieldset.innerHTML = '<legend>Choose reportable tests</legend><p>Select a group to tick every component automatically, then untick any tests that are not required. Only checked tests will appear in result entry and the report.</p>';
+      const searchBlock = document.createElement('div'); searchBlock.className = 'sangam-booking-search wide'; searchBlock.innerHTML = '<label>Search tests by name or category<input data-sangam-test-search placeholder="Search tests by name or category"></label><p data-sangam-test-count></p>';
+      const searchInput = searchBlock.querySelector('input'); const selectedInput = form.elements.tests; if (selectedInput) { selectedInput.required = false; selectedInput.removeAttribute('required'); } testFieldset.append(picker); selectedLabel?.classList.add('sangam-booking-selected'); if (selectedLabel) testFieldset.append(selectedLabel); form.insertBefore(searchBlock, feeLabel || notesLabel || actions); form.insertBefore(testFieldset, feeLabel || notesLabel || actions);
+      if (feeLabel) { feeLabel.classList.add('sangam-booking-fee'); feeLabel.firstChild.nodeValue = 'Booking price (₹)'; }
+      const updateReferral = () => { let state = {}; try { state = JSON.parse(localStorage.getItem('sangamRkWorkflow') || '{}'); } catch (_) {} const patient = (state.patients || []).find((item) => item.id === form.elements.patientId.value); referralLabel.querySelector('input').value = patient?.reference || 'Self / direct walk-in'; };
+      form.elements.patientId.addEventListener('change', updateReferral); updateReferral();
+      const countLabel = searchBlock.querySelector('[data-sangam-test-count]'); const updateSearch = () => { const query = searchInput.value.trim().toLowerCase(); const choices = Array.from(picker.querySelectorAll('.rk-test-choice')); choices.forEach((choice) => { choice.hidden = Boolean(query) && !choice.textContent.toLowerCase().includes(query); }); picker.querySelectorAll('.rk-test-panel').forEach((panel) => { panel.hidden = Boolean(query) && !Array.from(panel.querySelectorAll('.rk-test-choice')).some((choice) => !choice.hidden); }); const available = choices.filter((choice) => !choice.hidden).length; if (countLabel) countLabel.textContent = query ? available + ' matching test' + (available === 1 ? '' : 's') + ' shown.' : choices.length + ' tests available — search to narrow the list.'; }; searchInput.addEventListener('input', updateSearch); updateSearch();
+      const style = document.createElement('style'); style.textContent = '.sangam-booking-kicker{margin:0 0 2px!important;color:#d9545d!important;font-size:11px!important;font-weight:900!important;letter-spacing:.13em!important;text-transform:uppercase}.sangam-booking-fieldset{grid-column:1/-1;margin:0;border:1px solid #d7deea;border-radius:12px;padding:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.sangam-booking-fieldset legend{padding:0 8px;color:#27498a;font-weight:900}.sangam-booking-fieldset>p{grid-column:1/-1;margin:0;color:#718099;font-size:12px;line-height:1.45}.sangam-booking-tests{margin-top:4px}.sangam-booking-search{grid-column:1/-1;margin:2px 0 0}.sangam-booking-search label{display:grid;gap:7px;color:#33476b;font-size:13px;font-weight:800}.sangam-booking-search p{margin:8px 0 0;color:#718099;font-size:12px}.sangam-booking-tests #rkTestPicker{grid-column:1/-1;max-height:440px;overflow:auto;padding-right:8px}.sangam-booking-selected{display:none!important}.sangam-booking-fee{max-width:32%;margin-top:3px}@media(max-width:760px){.sangam-booking-fieldset{grid-template-columns:1fr}.sangam-booking-fee{max-width:none}}'; document.head.appendChild(style);
+    })();
+  </script>
+  <style id="sangam-report-font-specification">
+    .rk-report-paper.rk-supplied .rk-logo-box h1 { font:700 22px/1 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-patient-box { font:700 10px/1.45 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-patient-box strong { font:700 10px/1.45 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-report-banner { font:700 14px/1.2 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-department { font:700 10.5px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table .test-name { font:400 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2) { font:400 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-abnormal { font:700 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(4) { font:400 9.5px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-method { font:400 9px/1.25 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-sign { font:400 8px/1.3 Arial, Helvetica, sans-serif !important; }
+    .rk-report-paper.rk-supplied .rk-supplied-sign b { font:700 8px/1.3 Arial, Helvetica, sans-serif !important; }
+    .rk-page-number,.sangam-page-number { font:400 9px/1 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-patient-grid { font:700 10px/1.45 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-patient-grid b { font:700 10px/1.45 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table td b { font:400 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table td:nth-child(2) { font:400 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table td:nth-child(2).sangam-result-abnormal { font:700 10px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table td:nth-child(4) { font:400 9.5px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table td small { font:400 9px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-result-table .sangam-department td { font:700 10.5px/1.25 Arial, Helvetica, sans-serif !important; }
+    #rkPrintArea .sangam-signature { font:400 8px/1.3 Arial, Helvetica, sans-serif !important; }
+  </style>
+  <style id="sangam-final-report-typography">
+    /* Typography follows the supplied diagnostic-report reference. */
+    .rk-report-paper.rk-supplied .rk-logo-box h1 {
+      font:700 22px/1 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-patient-box,
+    .rk-report-paper.rk-supplied .rk-patient-box strong {
+      font:700 10px/1.45 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-report-banner {
+      font:700 14px/1.2 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-department,
+    #rkPrintArea .sangam-result-table .sangam-department td {
+      font:700 10.5px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table .test-name,
+    #rkPrintArea .sangam-result-table td:first-child b {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2),
+    #rkPrintArea .sangam-result-table td:nth-child(2) {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2) {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-high,
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-low,
+    #rkPrintArea .sangam-result-table td:nth-child(2).sangam-result-high,
+    #rkPrintArea .sangam-result-table td:nth-child(2).sangam-result-low {
+      font:700 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-high,
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-low {
+      font:700 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-normal,
+    #rkPrintArea .sangam-result-table td:nth-child(2).sangam-result-normal {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2).sangam-result-normal {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .sangam-result-status,
+    #rkPrintArea .sangam-result-status {
+      display:none !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(3),
+    #rkPrintArea .sangam-result-table td:nth-child(3) {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(3) {
+      font:400 10px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(4),
+    #rkPrintArea .sangam-result-table td:nth-child(4) {
+      font:400 9.5px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(4) {
+      font:400 9.5px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-method,
+    .rk-report-paper.rk-supplied .sangam-interpretation,
+    #rkPrintArea .sangam-interpretation {
+      font:400 9px/1.3 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-report-paper.rk-supplied .rk-supplied-sign,
+    .rk-report-paper.rk-supplied .rk-verification,
+    .rk-report-paper.rk-supplied .rk-tech .sub,
+    #rkPrintArea .sangam-signature {
+      font:400 8px/1.3 Arial, Helvetica, sans-serif !important;
+    }
+    .rk-page-number,
+    .sangam-page-number {
+      font:400 9px/1 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .rk-group-page .sangam-page-number { position:static !important; z-index:4 !important; color:#090909 !important; text-align:center !important; white-space:nowrap !important; }
+    #rkPrintArea .rk-group-page .sangam-page-signatures {
+      position:absolute !important;
+      right:12mm !important;
+      bottom:39mm !important;
+      left:12mm !important;
+      z-index:4 !important;
+      display:grid !important;
+      grid-template-columns:1fr auto 1fr !important;
+      align-items:end !important;
+      gap:20mm !important;
+      color:#090909 !important;
+      font:400 8px/1.3 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .sangam-incharge-signature,
+    #rkPrintArea .sangam-doctor-signature {
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:flex-start !important;
+    }
+    #rkPrintArea .sangam-doctor-signature {
+      align-items:flex-end !important;
+      text-align:right !important;
+    }
+    #rkPrintArea .sangam-signature-line {
+      display:block !important;
+      width:38mm !important;
+      height:12mm !important;
+      border-bottom:1px solid #222 !important;
+      margin-bottom:2mm !important;
+    }
+    #rkPrintArea .sangam-page-signatures img {
+      display:block !important;
+      width:35mm !important;
+      height:12mm !important;
+      margin:0 0 1mm !important;
+      object-fit:contain !important;
+      object-position:right bottom !important;
+    }
+    #rkPrintArea .sangam-page-signatures b,
+    #rkPrintArea .sangam-page-signatures strong {
+      font:700 8px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .sangam-page-signatures span:not(.sangam-signature-line),
+    #rkPrintArea .sangam-page-signatures small {
+      font:400 8px/1.25 Arial, Helvetica, sans-serif !important;
+    }
+    #rkPrintArea .sangam-page-signatures .sangam-authorised-label {
+      margin-bottom:1mm !important;
+      color:#8b1f1f !important;
+      font-weight:700 !important;
+    }
+  </style>
+  <script id="sangam-patient-registration-label">
+    (() => {
+      const applyLabel = () => {
+        document.querySelectorAll('.nav button[data-nav="patients"] span').forEach((navLabel) => {
+          if (navLabel.textContent !== 'Patients & Registration') navLabel.textContent = 'Patients & Registration';
+        });
+        const heading = document.querySelector('#rkWorkflow [data-rk-page="patients"] .rk-topline h2');
+        if (heading && heading.textContent !== 'Patients & Registration') heading.textContent = 'Patients & Registration';
+      };
+      applyLabel();
+      new MutationObserver(applyLabel).observe(document.body, { childList:true, subtree:true });
+    })();
+  </script>
+  <style id="sangam-professional-invoice-layout">
+    /* A compact invoice is readable on screen and uses A4 space without splitting the totals/footer. */
+    .rk-invoice {
+      width:100% !important;
+      max-width:920px !important;
+      min-height:0 !important;
+      margin:0 auto !important;
+      padding:26px 28px !important;
+      border:1px solid #d9c34e !important;
+      border-radius:4px !important;
+      box-shadow:0 14px 36px rgba(59,45,0,.14) !important;
+      color:#241f13 !important;
+      overflow:visible !important;
+    }
+    .rk-invoice-head {
+      grid-template-columns:50px minmax(0,1fr) 142px !important;
+      gap:12px !important;
+      padding:0 0 12px !important;
+      border-bottom:2px solid #d90927 !important;
+    }
+    .rk-invoice-head img { width:46px !important; height:46px !important; }
+    .rk-invoice-head h1 { font:800 22px/1.05 Arial,Helvetica,sans-serif !important; letter-spacing:.35px !important; }
+    .rk-invoice-head p { margin:3px 0 !important; font:600 9px/1.35 Arial,Helvetica,sans-serif !important; color:#514b3e !important; }
+    .rk-invoice-title b { padding:6px 8px !important; border-radius:3px !important; font:800 11px/1 Arial,Helvetica,sans-serif !important; }
+    .rk-invoice-title span { margin-top:4px !important; font:600 8.5px/1.3 Arial,Helvetica,sans-serif !important; }
+    .rk-invoice-info {
+      gap:20px !important;
+      margin:12px 0 !important;
+      padding:9px 10px !important;
+      border-color:#e2d9ae !important;
+      border-radius:3px !important;
+      background:rgba(255,255,255,.8) !important;
+      font:600 10px/1.45 Arial,Helvetica,sans-serif !important;
+    }
+    .rk-invoice-info strong { min-width:25mm !important; color:#5b4614 !important; font-size:8.5px !important; text-transform:uppercase !important; }
+    .rk-invoice-status { padding:3px 6px !important; font-size:8px !important; }
+    .rk-invoice-table { font:10px/1.25 Arial,Helvetica,sans-serif !important; }
+    .rk-invoice-table thead { display:table-header-group; }
+    .rk-invoice-table th { padding:8px 9px !important; font:800 8.5px/1 Arial,Helvetica,sans-serif !important; letter-spacing:.04em !important; }
+    .rk-invoice-table td { padding:7px 9px !important; border-bottom-color:#e5dec2 !important; vertical-align:top !important; }
+    .rk-invoice-table td:first-child { width:34px !important; font-size:9px !important; }
+    .rk-invoice-table tr { break-inside:avoid; page-break-inside:avoid; }
+    .rk-invoice-table td span { font-size:8px !important; line-height:1.2 !important; }
+    .rk-invoice-summary {
+      width:66mm !important;
+      margin-top:10px !important;
+      border-top-width:2px !important;
+      font-size:10px !important;
+      break-inside:avoid !important;
+      page-break-inside:avoid !important;
+    }
+    .rk-invoice-summary p { margin:5px 0 !important; }
+    .rk-invoice-summary .grand { padding-top:6px !important; font-size:12px !important; }
+    .rk-invoice-foot {
+      margin-top:18px !important;
+      padding-top:9px !important;
+      font:9px/1.35 Arial,Helvetica,sans-serif !important;
+      break-inside:avoid !important;
+      page-break-inside:avoid !important;
+    }
+    .rk-invoice-foot img { height:30px !important; width:88px !important; }
+    @media (max-width:760px) {
+      .rk-invoice { min-width:0 !important; padding:18px !important; }
+      .rk-invoice-head { grid-template-columns:42px minmax(0,1fr) !important; }
+      .rk-invoice-title { grid-column:2; text-align:left !important; }
+      .rk-invoice-info { grid-template-columns:1fr !important; gap:5px !important; }
+    }
+    @media print {
+      @page { size:A4 portrait; margin:8mm; }
+      html,body { width:auto !important; height:auto !important; }
+      .rk-page.active[data-rk-page="invoice"] { padding:0 !important; }
+      .rk-invoice {
+        width:100% !important;
+        max-width:none !important;
+        min-height:0 !important;
+        margin:0 !important;
+        padding:0 !important;
+        border:0 !important;
+        box-shadow:none !important;
+      }
+      .rk-invoice:before { opacity:.025 !important; }
+      .rk-invoice-head { grid-template-columns:38px minmax(0,1fr) 112px !important; gap:8px !important; padding-bottom:6px !important; }
+      .rk-invoice-head img { width:34px !important; height:34px !important; }
+      .rk-invoice-head h1 { font-size:17px !important; }
+      .rk-invoice-head p { margin:1px 0 !important; font-size:7.5px !important; line-height:1.2 !important; }
+      .rk-invoice-title b { padding:4px 6px !important; font-size:9px !important; }
+      .rk-invoice-title span { margin-top:2px !important; font-size:7px !important; }
+      .rk-invoice-info { gap:10px !important; margin:6px 0 !important; padding:5px 7px !important; font-size:7.5px !important; line-height:1.25 !important; }
+      .rk-invoice-info strong { min-width:22mm !important; font-size:7px !important; }
+      .rk-invoice-status { padding:2px 4px !important; font-size:6.5px !important; }
+      .rk-invoice-table { font-size:8px !important; line-height:1.15 !important; }
+      .rk-invoice-table th { padding:5px 6px !important; font-size:7px !important; }
+      .rk-invoice-table td { padding:3px 6px !important; }
+      .rk-invoice-table td:first-child { width:25px !important; font-size:7px !important; }
+      .rk-invoice-table td span { display:none !important; }
+      .rk-invoice-summary { width:56mm !important; margin-top:5px !important; font-size:8px !important; }
+      .rk-invoice-summary p { margin:2px 0 !important; }
+      .rk-invoice-summary .grand { padding-top:4px !important; font-size:9.5px !important; }
+      .rk-invoice-foot { margin-top:6px !important; padding-top:5px !important; font-size:7px !important; line-height:1.2 !important; }
+      .rk-invoice-foot img { width:70px !important; height:23px !important; }
+      .rk-invoice-summary,.rk-invoice-foot { break-inside:avoid !important; page-break-inside:avoid !important; }
+    }
+  </style>
+  <script id="sangam-dashboard-workspace">
+    (() => {
+      const shell = document.querySelector('.shell');
+      const topbar = shell?.querySelector('.topbar');
+      if (!shell || !topbar || document.getElementById('sangamDashboard')) return;
+      const dashboard = document.createElement('section');
+      dashboard.id = 'sangamDashboard';
+      dashboard.className = 'sangam-dashboard';
+      topbar.insertAdjacentElement('afterend', dashboard);
+
+      const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
+      const read = () => { try { return JSON.parse(localStorage.getItem('sangamRkWorkflow') || '{}'); } catch (_) { return {}; } };
+      const today = () => new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Asia/Kolkata' }).format(new Date());
+      const isToday = (value) => { const text = String(value || ''); return text === today() || text.startsWith(today()) || text.startsWith(new Date().toISOString().slice(0, 10)); };
+      const go = (workspace) => document.querySelector('.nav button[data-nav="' + workspace + '"]')?.click();
+      const card = (label, value, hint, workspace, tone) => '<button type="button" class="sangam-dash-metric ' + tone + '" data-dashboard-go="' + workspace + '"><span>' + safe(label) + '</span><b>' + safe(value) + '</b><small>' + safe(hint) + '</small></button>';
+      const action = (label, description, workspace, symbol) => '<button type="button" class="sangam-dash-action" data-dashboard-go="' + workspace + '"><i>' + symbol + '</i><span><b>' + safe(label) + '</b><small>' + safe(description) + '</small></span><em>›</em></button>';
+      const render = () => {
+        const state = read();
+        const patients = Array.isArray(state.patients) ? state.patients : [];
+        const reports = Array.isArray(state.reports) ? state.reports : [];
+        const patientName = (report) => patients.find((patient) => patient.id === report.patientId)?.name || report.patientId || 'Patient';
+        const todaysPatients = patients.filter((patient) => isToday(patient.createdOn));
+        const todaysBookings = reports.filter((report) => isToday(report.createdOn));
+        const pending = reports.filter((report) => report.status !== 'Final');
+        const released = reports.filter((report) => report.status === 'Final' && isToday(report.reportedOn || report.createdOn));
+        const finalReports = reports.filter((report) => report.status === 'Final');
+        const recent = finalReports.slice(0, 4);
+        const recentDetail = recent.length ? 'Latest: ' + (recent[0].reportNo || 'Report') + ' · ' + patientName(recent[0]) : 'No final reports yet';
+        dashboard.innerHTML = '<div class="sangam-dash-heading"><div><h2>Operations / Overview</h2><span>Today, ' + safe(today()) + '</span></div><button type="button" class="sangam-dash-primary" data-dashboard-go="patients">+ New patient</button></div><section class="sangam-dash-metrics">' +
+          card('Total patients', patients.length, 'Open patient records', 'patients', 'gold') +
+          card('Today’s patients', todaysPatients.length, 'Registered today', 'patients', 'red') +
+          card('Today’s bookings', todaysBookings.length, 'Tests booked today', 'newreport', 'blue') +
+          card('Pending reports', pending.length, 'Awaiting result entry', 'results', 'orange') +
+          card('Today’s release', released.length, 'Final reports released', 'reports', 'green') +
+          '</section><div class="sangam-dash-grid"><section class="sangam-dash-card"><header><div><p>Quick actions</p><h3>Open a workspace</h3></div></header><div class="sangam-dash-actions">' +
+          action('Patients & Registration', 'Register or update patient details', 'patients', '＋') +
+          action('Test booking', 'Book laboratory investigations', 'newreport', '⌕') +
+          action('Result entry', 'Enter and finalise results', 'results', '✓') +
+          action('View reports', 'Review, print, or edit reports', 'reports', '▤') +
+          '</div></section><section class="sangam-dash-card sangam-dash-status"><header><div><p>Report activity</p><h3>Today’s report status</h3></div></header><button type="button" class="sangam-dash-status-row" data-dashboard-go="newreport"><span class="sangam-dash-dot blue"></span><span class="sangam-dash-status-copy"><b>Today’s booking</b><small>New investigation requests</small></span><strong>' + todaysBookings.length + '</strong><em>›</em></button><button type="button" class="sangam-dash-status-row" data-dashboard-go="reports"><span class="sangam-dash-dot green"></span><span class="sangam-dash-status-copy"><b>Recent reports</b><small>' + safe(recentDetail) + '</small></span><strong>' + finalReports.length + '</strong><em>›</em></button><button type="button" class="sangam-dash-status-row" data-dashboard-go="results"><span class="sangam-dash-dot orange"></span><span class="sangam-dash-status-copy"><b>Pending reports</b><small>Reports awaiting result entry</small></span><strong>' + pending.length + '</strong><em>›</em></button></section></div>';
+      };
+      dashboard.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-dashboard-go]');
+        if (!button) return;
+        const workspace = button.dataset.dashboardGo;
+        go(workspace);
+        if (workspace === 'patients') window.setTimeout(() => document.querySelector('#rkPatientForm2 input[name="name"]')?.focus(), 0);
+      });
+      document.querySelector('.nav')?.addEventListener('click', (event) => { if (event.target.closest('button[data-nav="dashboard"]')) window.setTimeout(render, 0); });
+      render();
+    })();
+  </script>
+  <style id="sangam-dashboard-workspace-style">
+    .intro,.stats,.main-grid { display:none !important; }
+    .sangam-dashboard { display:grid; gap:20px; padding:6px 0 24px; }
+    .sangam-dash-heading { display:flex; justify-content:space-between; gap:20px; align-items:flex-end; }
+    .sangam-dash-heading p,.sangam-dash-card header p { margin:0; color:#ad001c; font:800 10px/1 Arial,Helvetica,sans-serif; letter-spacing:.13em; text-transform:uppercase; }
+    .sangam-dash-heading h2 { margin:7px 0 4px; color:#241b06; font:800 30px/1 Arial,Helvetica,sans-serif; letter-spacing:-.04em; }
+    .sangam-dash-heading span { color:#716032; font-size:12px; font-weight:600; }
+    .sangam-dash-primary { border:0; border-radius:9px; padding:12px 17px; background:#d90927; color:#fff; font:800 13px Arial,Helvetica,sans-serif; cursor:pointer; box-shadow:0 7px 15px rgba(183,0,29,.2); }
+    .sangam-dash-metrics { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:13px; }
+    .sangam-dash-metric { min-height:128px; padding:17px; border:1px solid #e7d67b; border-radius:13px; background:#fffef8; color:#241b06; text-align:left; cursor:pointer; transition:transform .16s ease,box-shadow .16s ease; }
+    .sangam-dash-metric:hover { transform:translateY(-2px); box-shadow:0 10px 20px rgba(75,54,0,.12); }
+    .sangam-dash-metric span { display:block; color:#705f32; font-size:11px; font-weight:800; }
+    .sangam-dash-metric b { display:block; margin:16px 0 5px; font:800 28px/1 Arial,Helvetica,sans-serif; }
+    .sangam-dash-metric small { display:block; color:#78683c; font-size:10px; }
+    .sangam-dash-metric.gold b { color:#7f5d00; }.sangam-dash-metric.red b { color:#b7001d; }.sangam-dash-metric.blue b { color:#225f9e; }.sangam-dash-metric.orange b { color:#a15600; }.sangam-dash-metric.green b { color:#177052; }
+    .sangam-dash-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:20px; }
+    .sangam-dash-card { border:1px solid #e7d67b; border-radius:14px; background:#fffef9; box-shadow:0 5px 17px rgba(69,48,2,.055); overflow:hidden; }
+    .sangam-dash-card header { display:flex; justify-content:space-between; align-items:center; padding:19px 20px 14px; border-bottom:1px solid #f0e7bc; }
+    .sangam-dash-card h3 { margin:6px 0 0; color:#241b06; font-size:18px; }
+    .sangam-dash-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px; }
+    .sangam-dash-action { display:flex; position:relative; align-items:center; gap:11px; min-height:76px; padding:13px; overflow:hidden; border:1px solid #bd001d; border-radius:10px; background:linear-gradient(135deg,#ef1737 0%,#d90927 62%,#b9001c 100%); box-shadow:0 6px 13px rgba(185,0,28,.20); color:#fff; text-align:left; cursor:pointer; transition:transform .16s ease,box-shadow .16s ease,filter .16s ease; }
+    .sangam-dash-action:before { content:""; position:absolute; inset:0; background:linear-gradient(105deg,rgba(255,255,255,.13),transparent 43%); pointer-events:none; }
+    .sangam-dash-action:hover { border-color:#920015; background:linear-gradient(135deg,#fa2747 0%,#d90927 58%,#a80019 100%); box-shadow:0 9px 18px rgba(185,0,28,.30); filter:saturate(1.06); transform:translateY(-2px); }
+    .sangam-dash-status-row:hover { border-color:#d90927; background:#fff9dc; }
+    .sangam-dash-action i { display:grid; position:relative; z-index:1; flex:0 0 34px; width:34px; height:34px; place-items:center; border-radius:9px; background:#fff0b4; box-shadow:0 2px 5px rgba(88,0,12,.16); color:#b6001d; font-style:normal; font-weight:900; }
+    .sangam-dash-action span { display:grid; position:relative; z-index:1; gap:4px; min-width:0; }.sangam-dash-action b { color:#fff; font-size:12px; }.sangam-dash-action small { color:#ffe8a0; font-size:10px; line-height:1.3; }.sangam-dash-action em { position:relative; z-index:1; margin-left:auto; color:#fff0b4; font:700 20px/1 Arial,sans-serif; font-style:normal; }.sangam-dash-status-row em { margin-left:auto; color:#b6001d; font:700 20px/1 Arial,sans-serif; font-style:normal; }
+    .sangam-dash-status { display:flex; flex-direction:column; }.sangam-dash-status-row { display:grid !important; grid-template-columns:9px minmax(0,1fr) auto 16px; align-items:center; column-gap:10px; width:100%; padding:15px 19px; border:0; border-bottom:1px solid #f0e7bc; background:transparent; color:#241b06; text-align:left; cursor:pointer; }.sangam-dash-status-row:last-child { border-bottom:0; }.sangam-dash-status-copy { display:grid !important; gap:3px; min-width:0; }.sangam-dash-status-copy b,.sangam-dash-status-copy small { display:block !important; visibility:visible !important; opacity:1 !important; text-align:left !important; }.sangam-dash-status-copy b { color:#241b06 !important; font-size:12px; font-weight:800; }.sangam-dash-status-copy small { overflow:hidden; color:#776b4e !important; font-size:10px; text-overflow:ellipsis; white-space:nowrap; }.sangam-dash-status-row strong { margin:0 !important; color:#b6001d; font-size:19px; }.sangam-dash-status-row em { margin:0 !important; color:#b6001d; font:700 20px/1 Arial,sans-serif; font-style:normal; }.sangam-dash-dot { display:block !important; width:9px !important; height:9px !important; border-radius:50%; }.sangam-dash-dot.blue { background:#2d6db1; }.sangam-dash-dot.green { background:#27825d; }.sangam-dash-dot.orange { background:#c87800; }
+    @media(max-width:1050px) { .sangam-dash-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }.sangam-dash-grid { grid-template-columns:1fr; } }
+    @media(max-width:650px) { .sangam-dash-heading { align-items:flex-start; flex-direction:column; }.sangam-dash-metrics,.sangam-dash-actions { grid-template-columns:1fr; }.sangam-dash-primary { width:100%; }.sangam-dash-metric { min-height:104px; } }
+  </style>
+  <script id="sangam-password-visibility-toggle">
+    (() => {
+      const password = document.getElementById('loginPassword');
+      if (!password || document.getElementById('passwordVisibilityToggle')) return;
+
+      const field = password.closest('.login-field');
+      if (!field) return;
+      field.classList.add('password-field');
+
+      const toggle = document.createElement('button');
+      toggle.id = 'passwordVisibilityToggle';
+      toggle.type = 'button';
+      toggle.className = 'password-visibility-toggle';
+
+      const updateToggle = () => {
+        const visible = password.type === 'text';
+        toggle.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+        toggle.setAttribute('aria-pressed', String(visible));
+        toggle.title = visible ? 'Hide password' : 'Show password';
+        toggle.innerHTML = visible
+          ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.7a2 2 0 002.7 2.7M9.9 4.2A10.8 10.8 0 0112 4c5.5 0 9.3 5.3 9.8 6-.4.7-1.5 2.2-3.2 3.5M6.5 6.5C4.1 8 2.5 10.5 2.2 11c.5.8 4.3 5 9.8 5 1 0 2-.2 2.8-.5" /></svg>'
+          : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12S6 5 12 5s9.8 7 9.8 7-3.8 7-9.8 7S2.2 12 2.2 12zM12 15a3 3 0 100-6 3 3 0 000 6z" /></svg>';
+      };
+
+      toggle.addEventListener('click', () => {
+        password.type = password.type === 'password' ? 'text' : 'password';
+        updateToggle();
+        password.focus();
+      });
+      field.appendChild(toggle);
+      updateToggle();
+    })();
+  </script>
+  <style id="sangam-password-visibility-style">
+    .login-field.password-field { position: relative; }
+    .login-field.password-field #loginPassword { padding-right: 48px; }
+    .password-visibility-toggle { position: absolute; right: 6px; bottom: 5px; display: grid; place-items: center; width: 34px; height: 34px; margin: 0; padding: 0; border: 0; border-radius: 7px; background: transparent; color: #365f79; cursor: pointer; }
+    .password-visibility-toggle:hover, .password-visibility-toggle:focus-visible { background: #e7eff8; color: #173e59; outline: 2px solid #8aaecb; outline-offset: 1px; transform: none; }
+    .password-visibility-toggle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.9; }
+  </style>
+  <script src="sangam-profile.js"></script>
+  <script src="sangam-settings.js"></script>
+  <script src="sangam-invoice-print.js"></script>
 </body>
 </html>
