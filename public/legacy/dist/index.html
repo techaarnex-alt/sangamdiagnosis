@@ -91,7 +91,7 @@
       </nav></div>
     </aside>
     <main class="shell">
-      <header class="topbar"><div><h1>Good morning, Indresh.</h1></div><div class="top-actions"><span class="date-chip">Thursday, 23 October 2026</span><div class="avatar">IY</div></div></header>
+      <header class="topbar"><div><h1>Good morning, Indresh.</h1></div><div class="top-actions"><span class="date-chip">Thursday, 23 October 2026</span></div></header>
       <section class="intro"><div><h2>Lab operations, with clarity.</h2><p>Register patients, track specimens and deliver clinically polished reports from one secure workspace.</p></div><div class="welcome-meta"><div><b>98%</b><span>Reports on time</span></div><div><b>12 min</b><span>Avg. processing</span></div></div></section>
       <section class="stats" id="analyticsSection"><article class="stat"><div class="stat-top"><span>Today’s registrations</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21v-2a8 8 0 0 1 16 0v2"/></svg></div></div><strong id="registrationCount">24</strong><small class="up">↑ 12% from yesterday</small></article><article class="stat"><div class="stat-top"><span>Samples in process</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.2L5.2 16a4 4 0 0 0 3.5 5.9h6.6a4 4 0 0 0 3.5-5.9L14 8.2V3"/><path d="M8 16h8"/></svg></div></div><strong>18</strong><small class="warn">6 need validation</small></article><article class="stat"><div class="stat-top"><span>Reports ready</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></div></div><strong>31</strong><small class="up">Ready for delivery</small></article><article class="stat"><div class="stat-top"><span>Collections today</span><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18M5 5h14v14H5z"/></svg></div></div><strong>₹18,460</strong><small class="up">↑ 8% from yesterday</small></article></section>
       <section class="main-grid"><div><article class="card"><div class="card-head"><h3>Recent patient activity</h3><a id="viewAll">View all patients</a></div><div class="filters"><input id="patientSearch" placeholder="Search by patient, ID or test…"><select><option>All status</option><option>In process</option><option>Ready</option></select></div><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Patient ID</th><th>Tests</th><th>Collection</th><th>Status</th><th></th></tr></thead><tbody id="patientRows"><tr><td><div class="patient"><span class="mini">MM</span><div><b>Mrs Madhuri</b><div class="muted">34 yrs · Female</div></div></div></td><td>AD-49046</td><td>Blood Sugar Fasting</td><td>21 Oct, 10:12 AM</td><td><span class="status done">Report ready</span></td><td><div class="row-actions"><button class="icon-btn preview" title="Open report"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="icon-btn print" title="Print report"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg></button></div></td></tr><tr><td><div class="patient"><span class="mini">AK</span><div><b>Arun Kumar</b><div class="muted">48 yrs · Male</div></div></div></td><td>AD-49045</td><td>CBC, HbA1c</td><td>21 Oct, 09:48 AM</td><td><span class="status progress">Validation</span></td><td><div class="row-actions"><button class="icon-btn preview"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td></tr><tr><td><div class="patient"><span class="mini">RS</span><div><b>Riya Singh</b><div class="muted">27 yrs · Female</div></div></div></td><td>AD-49044</td><td>Thyroid Profile</td><td>21 Oct, 09:31 AM</td><td><span class="status pending">Collected</span></td><td><div class="row-actions"><button class="icon-btn preview"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td></tr></tbody></table></div></article>
@@ -444,7 +444,7 @@
         document.getElementById('rkTestRows').innerHTML = rk.tests.length ? rk.tests.map(function (test, index) { return '<tr><td><b>' + safe(test.name) + '</b></td><td><input data-test-category="' + index + '" aria-label="Category for ' + safe(test.name) + '" value="' + safe(test.category || '') + '"></td><td>' + safe(test.units || '—') + '</td><td><textarea data-test-range="' + index + '" aria-label="Reference range for ' + safe(test.name) + '" rows="3">' + safe(test.range || '') + '</textarea>' + (test.rangeSuggested ? '<br><small>Suggested; validate for your lab</small>' : '') + '</td><td><input type="number" min="0" step="0.01" aria-label="Rate for ' + safe(test.name) + '" data-test-rate="' + index + '" value="' + safe(test.rate == null ? '' : test.rate) + '" placeholder="Not set" style="width:90px"></td><td><button type="button" class="outline-btn" data-save-rate="' + index + '">Save changes</button></td></tr>'; }).join('') : '<tr><td colspan="6">No custom laboratory tests saved yet.</td></tr>';
         const patientQuery = document.getElementById('rkPatientSearch').value.trim().toLowerCase();
         const matchingPatients = rk.patients.filter(function (p) { return String(p.id || '').toLowerCase().includes(patientQuery) || String(p.name || '').toLowerCase().includes(patientQuery); });
-        document.getElementById('rkPatientRows2').innerHTML = matchingPatients.length ? matchingPatients.map(function (p) { return '<tr><td><b>' + safe(p.id) + '</b></td><td>' + safe(p.name) + '</td><td>' + safe(patientAge(p)) + ' / ' + safe(p.gender) + '</td><td>' + safe(p.mobile) + '</td><td>' + safe(p.reference) + '</td><td><button class="outline-btn" data-sangam-edit-patient="' + safe(p.id) + '">Edit</button> <button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(p.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(p.id) + '">New report</button></td></tr>'; }).join('') : '<tr><td colspan="6">' + (patientQuery ? 'No patients match this ID or name.' : 'No patients registered yet.') + '</td></tr>';
+        document.getElementById('rkPatientRows2').innerHTML = matchingPatients.length ? matchingPatients.map(function (p) { return '<tr><td><b>' + safe(p.id) + '</b></td><td>' + safe(p.name) + '</td><td>' + safe(patientAge(p)) + ' / ' + safe(p.gender) + '</td><td>' + safe(p.mobile) + '</td><td>' + safe(p.reference) + '</td><td><button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(p.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(p.id) + '">Test booking</button></td></tr>'; }).join('') : '<tr><td colspan="6">' + (patientQuery ? 'No patients match this ID or name.' : 'No patients registered yet.') + '</td></tr>';
         const drafts = rk.reports.filter(function (r) { return r.status !== 'Final'; });
         document.getElementById('rkResultsArea').innerHTML = drafts.length ? drafts.map(function (r) { const p = findPatient(r.patientId) || {}; const entries = r.tests.map(function (t) { const result = reportResult(r, t); const reference = getReference(t); const range = reportReferenceRange(r, t); const units = result.units || reference.units; return '<section class="rk-result-entry wide" data-rk-test="' + safe(t) + '"><h4>' + safe(t) + '</h4><div class="rk-form"><label>Result<input name="value" value="' + safe(result.value || '') + '" required><button class="outline-btn" type="button" data-rk-clear-result>Clear result</button></label><label>Unit<input name="units" value="' + safe(units) + '" placeholder="e.g. mg/dL"></label><label class="wide">Reference range<input name="range" value="' + safe(range) + '" aria-label="Reference range for ' + safe(t) + '"></label><p class="rk-reference-hint"><b>Suggested reference:</b> ' + safe(reference.range) + '<br><small>Source: ' + safe(reference.source) + '. Verify / replace with your laboratory-validated range before finalising.</small></p></div></section>'; }).join(''); return '<div class="rk-card"><div class="rk-topline"><div><h3>' + safe(r.reportNo) + ' · ' + safe(p.name || r.patientId) + '</h3><p>' + safe(r.tests.join(', ')) + '</p></div><span class="rk-badge">Draft</span></div><form class="rk-form" data-rk-result-form="' + safe(r.id) + '">' + entries + '<div class="wide rk-actions"><button class="outline-btn" type="submit" name="mode" value="draft" formnovalidate>Save draft</button><button class="primary-btn" type="submit" name="mode" value="final">Finalise report</button></div></form></div>'; }).join('') : '<div class="rk-card">No draft reports awaiting results.</div>';
         document.getElementById('rkReportRows2').innerHTML = rk.reports.length ? rk.reports.map(function (r) { const p = findPatient(r.patientId) || {}; const final = r.status === 'Final'; return '<tr><td><b>' + safe(r.reportNo) + '</b></td><td>' + safe(p.name || r.patientId) + '</td><td>' + safe(r.tests.join(', ')) + '</td><td>' + safe(r.createdOn) + '</td><td><span class="rk-badge ' + (final ? 'final' : '') + '">' + safe(r.status) + '</span></td><td>' + (final ? '<button class="outline-btn" data-rk-action="preview" data-report="' + safe(r.id) + '">Preview / Print</button>' : '<button class="outline-btn" data-rk-action="open-draft" data-report="' + safe(r.id) + '">Open draft / enter results</button>') + '</td></tr>'; }).join('') : '<tr><td colspan="6">No reports created yet.</td></tr>';
@@ -667,7 +667,7 @@
           return String(patient.id || '').toLowerCase().includes(query) || String(patient.name || '').toLowerCase().includes(query) || String(patient.mobile || '').toLowerCase().includes(query);
         });
         document.getElementById('rkPatientRows2').innerHTML = matches.length ? matches.map(function (patient) {
-          return '<tr><td><b>' + safe(patient.id) + '</b></td><td>' + safe(patient.name) + '</td><td>' + safe(patientAge(patient)) + ' / ' + safe(patient.gender) + '</td><td>' + safe(patient.mobile) + '</td><td>' + safe(patient.reference) + '</td><td><button class="outline-btn" data-sangam-edit-patient="' + safe(patient.id) + '">Edit</button> <button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(patient.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(patient.id) + '">New report</button></td></tr>';
+          return '<tr><td><b>' + safe(patient.id) + '</b></td><td>' + safe(patient.name) + '</td><td>' + safe(patientAge(patient)) + ' / ' + safe(patient.gender) + '</td><td>' + safe(patient.mobile) + '</td><td>' + safe(patient.reference) + '</td><td><button class="outline-btn" data-rk-action="patient-history" data-patient="' + safe(patient.id) + '">Open record</button> <button class="outline-btn" data-rk-action="new-for-patient" data-patient="' + safe(patient.id) + '">Test booking</button></td></tr>';
         }).join('') : '<tr><td colspan="6">' + (query ? 'No patients match this name, ID or mobile number.' : 'No patients registered yet.') + '</td></tr>';
       }, true);
 
@@ -1612,10 +1612,6 @@
       const safe = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
       const updateButtons = () => {
         const state = read();
-        document.querySelectorAll('#rkPatientRows2 tr').forEach((row) => {
-          const id = row.cells?.[0]?.textContent.trim(); const patient = state.patients?.find((item) => item.id === id); const cell = row.lastElementChild;
-          if (patient && cell && !cell.querySelector('[data-sangam-edit-patient]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn" data-sangam-edit-patient="' + safe(patient.id) + '">Edit patient</button>');
-        });
         document.querySelectorAll('#rkReportRows2 tr').forEach((row) => {
           const number = row.cells?.[0]?.textContent.trim(); const report = state.reports?.find((item) => item.reportNo === number); const cell = row.lastElementChild;
           if (report && cell && !cell.querySelector('[data-sangam-edit-report]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn" data-sangam-edit-report="' + safe(report.id) + '">Edit report</button>');
@@ -2037,11 +2033,17 @@
         const state = read();
         const patients = Array.isArray(state.patients) ? state.patients : [];
         const reports = Array.isArray(state.reports) ? state.reports : [];
+        const formatMoney = (amount) => new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', minimumFractionDigits:0, maximumFractionDigits:2 }).format(amount);
         const patientName = (report) => patients.find((patient) => patient.id === report.patientId)?.name || report.patientId || 'Patient';
         const todaysPatients = patients.filter((patient) => isToday(patient.createdOn));
         const todaysBookings = reports.filter((report) => isToday(report.createdOn));
         const pending = reports.filter((report) => report.status !== 'Final');
-        const released = reports.filter((report) => report.status === 'Final' && isToday(report.reportedOn || report.createdOn));
+        const todaysRevenue = reports.reduce((total, report) => {
+          if (!isToday(report.paidOn)) return total;
+          const breakdown = report.paymentBreakdown;
+          if (breakdown && typeof breakdown === 'object') return total + ['cash', 'upi', 'card'].reduce((sum, mode) => sum + Number(breakdown[mode] || 0), 0);
+          return ['cash', 'upi', 'card'].includes(String(report.paymentMode || '').toLowerCase()) ? total + Number(report.paid || 0) : total;
+        }, 0);
         const finalReports = reports.filter((report) => report.status === 'Final');
         const recent = finalReports.slice(0, 4);
         const recentDetail = recent.length ? 'Latest: ' + (recent[0].reportNo || 'Report') + ' · ' + patientName(recent[0]) : 'No final reports yet';
@@ -2050,7 +2052,7 @@
           card('Today’s patients', todaysPatients.length, 'Registered today', 'patients', 'red') +
           card('Today’s bookings', todaysBookings.length, 'Tests booked today', 'newreport', 'blue') +
           card('Pending reports', pending.length, 'Awaiting result entry', 'results', 'orange') +
-          card('Today’s release', released.length, 'Final reports released', 'reports', 'green') +
+          card('Today’s revenue', formatMoney(todaysRevenue), 'Cash, UPI & card collected today', 'billing', 'green') +
           '</section><div class="sangam-dash-grid"><section class="sangam-dash-card"><header><div><p>Quick actions</p><h3>Open a workspace</h3></div></header><div class="sangam-dash-actions">' +
           action('Patients & Registration', 'Register or update patient details', 'patients', '＋') +
           action('Test booking', 'Book laboratory investigations', 'newreport', '⌕') +
@@ -2139,8 +2141,62 @@
     .password-visibility-toggle:hover, .password-visibility-toggle:focus-visible { background: #e7eff8; color: #173e59; outline: 2px solid #8aaecb; outline-offset: 1px; transform: none; }
     .password-visibility-toggle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.9; }
   </style>
+  <style id="sangam-profile-editor-style">
+    .sangam-profile-topline{align-items:center!important}.sangam-profile-edit,.sangam-profile-save{border:0;border-radius:8px;background:#d90927;color:#fff;padding:11px 16px;font:800 13px Arial,sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(217,9,39,.2)}.sangam-profile-edit:hover,.sangam-profile-save:hover{background:#940018}.sangam-profile-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;padding:28px 34px;border:1px solid #e7d67b;border-radius:16px;background:#fffef9;box-shadow:0 6px 20px rgba(69,48,2,.07)}.sangam-profile-editor label{display:grid;gap:7px;color:#352c0b;font-size:13px;font-weight:800}.sangam-profile-editor label.wide,.sangam-profile-editor__actions{grid-column:1/-1}.sangam-profile-editor label>b{color:#c40020}.sangam-profile-editor input,.sangam-profile-editor textarea{width:100%;border:1px solid #d8c98e;border-radius:9px;background:#fff;color:#241b06;padding:11px 12px;font:400 15px/1.35 Inter,Arial,sans-serif;outline:0}.sangam-profile-editor textarea{resize:vertical;min-height:76px}.sangam-profile-editor input:focus,.sangam-profile-editor textarea:focus{border-color:#d90927;box-shadow:0 0 0 3px #ffe9a6}.sangam-profile-editor input[readonly]{background:#f5f0dd;color:#736535;cursor:not-allowed}.sangam-profile-editor small{color:#746536;font-size:11px;font-weight:500}.sangam-profile-editor__actions{display:flex;justify-content:flex-end;gap:12px;padding-top:18px;border-top:1px solid #f0e4b2}.sangam-profile-cancel{border:1px solid #ddc875;border-radius:8px;background:#fffef9;color:#352c0b;padding:10px 16px;font-weight:800;cursor:pointer}@media(max-width:650px){.sangam-profile-topline{align-items:flex-start!important}.sangam-profile-editor{grid-template-columns:1fr;padding:20px 18px}.sangam-profile-editor__actions{justify-content:stretch}.sangam-profile-editor__actions button{flex:1}}
+  </style>
   <script src="sangam-profile.js"></script>
   <script src="sangam-settings.js"></script>
   <script src="sangam-invoice-print.js"></script>
+  <script id="sangam-patient-serial-numbers">
+    (() => {
+      const updateSerialNumbers = () => {
+        const body = document.getElementById('rkPatientRows2');
+        const table = body?.closest('table');
+        if (!body || !table) return;
+        const header = table.querySelector('thead tr');
+        if (header && !header.querySelector('[data-sangam-serial-column]')) {
+          const cell = document.createElement('th');
+          cell.dataset.sangamSerialColumn = 'true';
+          cell.textContent = 'S. No.';
+          header.prepend(cell);
+        }
+        Array.from(body.rows).forEach((row, index) => {
+          if (row.cells.length === 1) {
+            row.cells[0].colSpan = 7;
+            return;
+          }
+          let cell = row.querySelector('[data-sangam-patient-serial]');
+          if (!cell) {
+            cell = document.createElement('td');
+            cell.dataset.sangamPatientSerial = 'true';
+            row.prepend(cell);
+          }
+          const serial = String(index + 1);
+          if (cell.textContent !== serial) cell.textContent = serial;
+        });
+      };
+      new MutationObserver(updateSerialNumbers).observe(document.body, { childList:true, subtree:true });
+      updateSerialNumbers();
+    })();
+  </script>
+  <script id="sangam-patient-record-edit">
+    (() => {
+      const addEditButton = () => {
+        const history = document.getElementById('rkPatientHistory');
+        const actions = history?.querySelector('.rk-topline .rk-actions');
+        const patientId = history?.querySelector('.rk-topline p')?.textContent.split(' · ')[0].trim();
+        if (!actions || !patientId || actions.querySelector('[data-sangam-edit-patient]')) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'outline-btn';
+        button.dataset.sangamEditPatient = patientId;
+        button.textContent = 'Edit patient details';
+        actions.insertBefore(button, actions.querySelector('[data-rk-action="new-for-patient"]'));
+      };
+      const history = document.getElementById('rkPatientHistory');
+      if (history) new MutationObserver(addEditButton).observe(history, { childList:true, subtree:true });
+      addEditButton();
+    })();
+  </script>
 </body>
 </html>

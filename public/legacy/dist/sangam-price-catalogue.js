@@ -83,8 +83,9 @@
     const renderCatalogue = () => {
       const query = (tools.querySelector('input').value || '').trim().toLowerCase();
       const filtered = tests.filter((test) => [test.name, test.sample, test.method, test.category, profileMembers(test).join(' ')].join(' ').toLowerCase().includes(query));
-      table.querySelector('thead').innerHTML = '<tr><th>Investigation</th><th>Sample & collection</th><th>Handling / method</th><th>Cut-off & reporting</th><th>Prices</th><th>Reference range</th></tr>';
-      body.innerHTML = filtered.map(testRow).join('') || '<tr><td colspan="6" class="sangam-empty">No catalogue entries match this search.</td></tr>';
+      table.querySelector('thead').innerHTML = '<tr><th class="sangam-catalogue-serial">S. No.</th><th>Investigation</th><th>Sample & collection</th><th>Handling / method</th><th>Cut-off & reporting</th><th>Prices</th><th>Reference range</th></tr>';
+      body.innerHTML = filtered.map(testRow).join('') || '<tr><td colspan="7" class="sangam-empty">No catalogue entries match this search.</td></tr>';
+      Array.from(body.rows).forEach((row, index) => { if (row.querySelector('.sangam-empty')) return; const cell = row.insertCell(0); cell.className = 'sangam-catalogue-serial'; cell.textContent = String(index + 1); });
       body.dataset.priceCatalogueRendered = 'true';
     };
     body.addEventListener('click', (event) => {
@@ -119,6 +120,9 @@
   const groupStyle = document.createElement('style');
   groupStyle.textContent = '.sangam-profile-inline{margin-top:9px;padding-top:8px;border-top:1px solid #ecd980;color:#5a4a13}.sangam-profile-inline>b{display:block;margin-bottom:6px;color:#9a001b;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.sangam-profile-inline div{display:flex;flex-wrap:wrap;gap:5px}.sangam-profile-inline span{padding:3px 6px;border:1px solid #ead88c;border-radius:999px;background:#fff8d7;color:#5c4a0c;font-size:9px;font-weight:700}.sangam-catalogue-test-row td{border-top:0!important}.sangam-remove-test{width:100%;margin-top:6px;padding:7px!important;border:1px solid #e37a87!important;border-radius:6px!important;background:#fff2f3!important;color:#9a001a!important;font-size:11px!important;font-weight:800}.sangam-remove-test:hover{background:#ffe0e4!important}';
   document.head.appendChild(groupStyle);
+  const serialStyle = document.createElement('style');
+  serialStyle.textContent = '.rk-table:has(#rkTestRows){table-layout:auto!important;min-width:1180px!important}.rk-table:has(#rkTestRows) th.sangam-catalogue-serial,.rk-table:has(#rkTestRows) td.sangam-catalogue-serial{width:58px!important;min-width:58px!important;max-width:58px!important;padding-left:16px!important;padding-right:8px!important;white-space:nowrap!important}.rk-table:has(#rkTestRows) th:nth-child(2),.rk-table:has(#rkTestRows) td:nth-child(2){width:19%!important;min-width:190px!important}.rk-table:has(#rkTestRows) th:nth-child(3),.rk-table:has(#rkTestRows) td:nth-child(3){width:24%!important;min-width:250px!important}.rk-table:has(#rkTestRows) th:nth-child(4),.rk-table:has(#rkTestRows) td:nth-child(4){width:16%!important;min-width:165px!important}.rk-table:has(#rkTestRows) th:nth-child(5),.rk-table:has(#rkTestRows) td:nth-child(5){width:14%!important;min-width:150px!important}.rk-table:has(#rkTestRows) th:nth-child(6),.rk-table:has(#rkTestRows) td:nth-child(6){width:12%!important;min-width:135px!important}.rk-table:has(#rkTestRows) th:nth-child(7),.rk-table:has(#rkTestRows) td:nth-child(7){width:11%!important;min-width:180px!important}';
+  document.head.appendChild(serialStyle);
   const observer = new MutationObserver(() => window.requestAnimationFrame(render));
   observer.observe(document.body, { childList: true, subtree: true });
   window.requestAnimationFrame(render);
