@@ -193,4 +193,133 @@
   const reportsButton = navigation?.querySelector('[data-nav="reports"]');
   const billingButton = navigation?.querySelector('[data-nav="billing"]');
   if (reportsButton && billingButton) reportsButton.insertAdjacentElement('afterend', billingButton);
+
+  // Keep the supplied report stationery intact while making its printed text
+  // clearer and restoring the two signature positions requested by the centre.
+  const reportPrintStyle = document.createElement('style');
+  reportPrintStyle.id = 'sangam-report-print-readability';
+  reportPrintStyle.textContent = `
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-patient-box { font-size: 11.5px !important; line-height: 1.62 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-patient-box strong { font-size: 9.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table { font-size: 11px !important; line-height: 1.3 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table th { padding: 5px 8px !important; font-size: 9.6px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td { padding: 10px 8px !important; font-size: 11px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(2),
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(3),
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table td:nth-child(4) { color: #111 !important; font-weight: 700 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-table .test-name { font-size: 11.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-method { font-size: 8.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-department { font-size: 9.7px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-end { font-size: 8.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign { display: grid !important; grid-template-columns: 1fr 1fr !important; align-items: end !important; column-gap: 35mm !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech { display: block !important; justify-self: start !important; min-width: 45mm !important; font-size: 10px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .technician-signature-space { width: 42mm !important; height: 14mm !important; margin: 0 0 2mm !important; border-bottom: .35mm solid #557b75 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech b { display: block !important; font-size: 10.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-tech small { display: block !important; margin-top: 1mm !important; font-size: 8.5px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign > div:last-child { justify-self: end !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-path b { font-size: 10.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-path .doctor-title { font-size: 11.8px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied .rk-verification { font-size: 8.2px !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation { box-sizing: border-box !important; min-height: 297mm !important; height: 297mm !important; margin: 10mm auto !important; padding: 52mm 12mm 40mm !important; overflow: hidden !important; break-before: page !important; page-break-before: always !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation::before { content: "" !important; display: block !important; position: absolute !important; inset: 0 !important; height: auto !important; background: url("report.jpeg") center / 210mm 297mm no-repeat !important; opacity: 1 !important; z-index: 0 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation::after { content: "" !important; display: block !important; position: absolute !important; top: 0 !important; right: 0 !important; left: 0 !important; bottom: auto !important; height: 52mm !important; background: #f0f8fc !important; opacity: 1 !important; z-index: 1 !important; pointer-events: none !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation > * { position: relative !important; z-index: 3 !important; }
+    #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation .rk-supplied-sign { margin-top: 12mm !important; }
+    @media print { #rkPrintArea .rk-report-paper.rk-supplied.rk-report-continuation { width: 210mm !important; margin: 0 !important; } }
+    @media print {
+      #rkPrintArea .rk-report-paper.rk-supplied { position: relative !important; display: block !important; box-sizing: border-box !important; width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important; min-height: 297mm !important; height: 297mm !important; max-height: 297mm !important; margin: 0 !important; padding: 52mm 12mm 40mm !important; overflow: hidden !important; break-after: page !important; page-break-after: always !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied:last-child { break-after: auto !important; page-break-after: auto !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied .rk-print-stationery { display: none !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied::before { content: "" !important; display: block !important; position: absolute !important; inset: 0 !important; width: auto !important; height: auto !important; background: url("report.jpeg") center / 210mm 297mm no-repeat !important; opacity: 1 !important; z-index: 0 !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied > * { position: relative !important; z-index: 3 !important; }
+      #rkPrintArea .rk-report-paper.rk-supplied .rk-supplied-sign { position: relative !important; right: auto !important; bottom: auto !important; left: auto !important; margin: 12mm 0 0 !important; padding: 0 !important; }
+    }
+  `;
+  document.head.appendChild(reportPrintStyle);
+
+  const applyReportPrintSettings = (root = document) => {
+    $$('.rk-supplied-sign .rk-tech', root).forEach((panel) => {
+      if (panel.dataset.pathologyInchargeReady) return;
+      panel.dataset.pathologyInchargeReady = 'true';
+      const signatureLine = document.createElement('div');
+      signatureLine.className = 'technician-signature-space';
+      signatureLine.setAttribute('aria-label', 'Pathology Incharge signature space');
+      const label = document.createElement('b');
+      label.textContent = 'Pathology Incharge';
+      const caption = document.createElement('small');
+      caption.textContent = 'Signature';
+      panel.replaceChildren(signatureLine, label, caption);
+    });
+    $$('.rk-supplied-sign .doctor-title', root).forEach((title) => {
+      if (title.textContent !== 'DR. Abha Mishra') title.textContent = 'DR. Abha Mishra';
+    });
+    $$('.rk-supplied-sign .rk-path', root).forEach((path) => {
+      [...path.childNodes].forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === 'MBBS') node.textContent = 'MBBS, MD, PATH';
+      });
+    });
+  };
+
+  const paginateLongReports = (root = document) => {
+    $$('#rkPrintArea .rk-report-paper.rk-supplied:not([data-rk-paginated])', root).forEach((paper) => {
+      const table = $('.rk-supplied-table', paper);
+      if (!table) return;
+      const body = $('tbody', table);
+      if (!body) return;
+      const departmentRow = [...body.rows].find((row) => row.querySelector('.rk-department'));
+      const resultRows = [...body.rows].filter((row) => row !== departmentRow);
+      paper.dataset.rkPaginated = 'true';
+      if (resultRows.length <= 5) return;
+
+      const endMarker = $('.rk-end', paper);
+      const signatures = $('.rk-supplied-sign', paper);
+      const groups = [];
+      let remaining = resultRows.length;
+      const firstCount = Math.min(6, remaining - 2);
+      groups.push(resultRows.splice(0, firstCount));
+      remaining -= firstCount;
+      while (remaining > 6) {
+        const count = Math.min(8, remaining - 2);
+        groups.push(resultRows.splice(0, count));
+        remaining -= count;
+      }
+      groups.push(resultRows.splice(0, remaining));
+
+      const makeTable = (rows) => {
+        const nextTable = table.cloneNode(false);
+        const header = $('thead', table)?.cloneNode(true);
+        const nextBody = document.createElement('tbody');
+        if (departmentRow) nextBody.appendChild(departmentRow.cloneNode(true));
+        rows.forEach((row) => nextBody.appendChild(row));
+        if (header) nextTable.appendChild(header);
+        nextTable.appendChild(nextBody);
+        return nextTable;
+      };
+
+      table.replaceWith(makeTable(groups.shift()));
+      endMarker?.remove();
+      signatures?.remove();
+      let previousPage = paper;
+      groups.forEach((rows, index) => {
+        const continuation = paper.cloneNode(false);
+        continuation.classList.add('rk-report-continuation');
+        continuation.dataset.rkPaginated = 'true';
+        continuation.appendChild(makeTable(rows));
+        const isFinalPage = index === groups.length - 1;
+        if (isFinalPage) {
+          if (endMarker) continuation.appendChild(endMarker);
+          if (signatures) continuation.appendChild(signatures);
+        }
+        previousPage.after(continuation);
+        previousPage = continuation;
+      });
+    });
+  };
+
+  paginateLongReports();
+  applyReportPrintSettings();
+  new MutationObserver(() => {
+    paginateLongReports();
+    applyReportPrintSettings();
+  }).observe(document.body, { childList: true, subtree: true });
 })();
