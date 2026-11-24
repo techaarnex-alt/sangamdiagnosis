@@ -42,6 +42,40 @@
     .app{width:100%;max-width:100%;overflow-x:hidden}
     .sidebar,.shell,.sidebar .nav,.sidebar .nav button{min-width:0}
   </style>
+  <style id="sangam-fixed-sidebar-scroll">
+    /* The navigation remains in view; only the workspace scrolls on desktop/tablet. */
+    @media screen and (min-width:651px){
+      html,body{height:100%;overflow-y:hidden}
+      .app{height:100vh;min-height:0;overflow:hidden}
+      .sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;overscroll-behavior:contain}
+      .shell{height:100vh;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+    }
+  </style>
+  <style id="sangam-compact-workspace-layout">
+    /* Keep every workflow page usable when the app is viewed in a narrow pane. */
+    @media (min-width:651px) and (max-width:1100px){
+      .app{grid-template-columns:220px minmax(0,1fr)!important}
+      .sidebar{width:auto!important;padding:18px 12px!important}
+      .sidebar .brand{display:flex!important;padding:0 4px!important;justify-content:flex-start!important}
+      .sidebar .brand b,.sidebar .brand span,.sidebar .nav-label,.sidebar .nav button span{display:block!important}
+      .sidebar .nav button{justify-content:flex-start!important;padding:11px 10px!important}
+      .shell{min-width:0!important;padding:20px 18px 32px!important}
+      .rk-form{grid-template-columns:1fr!important}
+      .rk-form .wide{grid-column:auto!important}
+    }
+    @media (max-width:650px){
+      .app{display:block!important;min-width:0!important}
+      .sidebar{display:block!important;position:static!important;width:100%!important;height:auto!important;padding:12px!important}
+      .sidebar .brand{display:flex!important;padding:0 4px 10px!important;justify-content:flex-start!important}
+      .sidebar .brand b,.sidebar .brand span,.sidebar .nav-label,.sidebar .nav button span{display:block!important}
+      .sidebar .nav{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+      .sidebar .nav button{width:100%!important;justify-content:flex-start!important;padding:10px!important;font-size:12px!important;white-space:nowrap!important}
+      .shell{width:100%!important;min-width:0!important;padding:18px 14px 28px!important}
+      .rk-topline,.rk-actions{flex-wrap:wrap!important;gap:10px!important}
+      .rk-form{grid-template-columns:1fr!important}
+      .rk-form .wide{grid-column:auto!important}
+    }
+  </style>
 </head>
 <body>
   <section class="login-screen" id="loginScreen"><div class="login-shell"><div class="login-aside"><div class="login-brand"><img src="logo.jpeg" alt="Aradhya Diagnostic logo"><div><b>ARADHYA</b><span>Diagnostic Suite</span></div></div><h1>Precision begins with protected access.</h1><p>Sign in to securely manage registrations, test workflow and clinical report delivery.</p><div class="login-points"><span>Centralised lab workflow</span><span>Professional report delivery</span><span>Browser-local session protection</span></div></div><div class="login-panel"><form class="login-form" id="loginForm"><h2>Welcome back</h2><p>Enter your laboratory account details to continue.</p><div class="login-field"><label for="loginUser">Username</label><input id="loginUser" autocomplete="username" required placeholder="Enter your username"></div><div class="login-field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password"></div><button class="primary login-submit" type="submit">Sign in to workspace</button><div class="login-error" id="loginError">The username or password is incorrect.</div><p class="login-help">Aradhya Diagnostic · Laboratory Operations</p></form></div></div></section>
@@ -1010,13 +1044,15 @@
         let state;
         try { state = JSON.parse(localStorage.getItem('sangamRkWorkflow') || '{}'); } catch (_) { state = {}; }
         const tests = Array.isArray(state.tests) ? state.tests : [];
-        document.querySelectorAll('#rkTestRows tr').forEach((row, index) => {
+        document.querySelectorAll('#rkTestRows tr').forEach((row, rowIndex) => {
+          if (row.classList.contains('sangam-catalogue-group-row')) return;
+          const index = row.dataset.sangamCatalogueIndex == null ? rowIndex : Number(row.dataset.sangamCatalogueIndex);
           const test = tests[index];
           // Profile components support result entry but are not standalone bookable catalogue items.
           if (!test || !test.standardTest) { row.hidden = true; return; }
           row.hidden = false;
           const cell = row.lastElementChild;
-          if (cell && !cell.querySelector('[data-remove-catalogue-test]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn catalogue-remove" data-remove-catalogue-test="' + index + '">Remove</button>');
+          if (cell && !cell.querySelector('[data-remove-catalogue-test],[data-sangam-remove-test]')) cell.insertAdjacentHTML('beforeend', ' <button type="button" class="outline-btn catalogue-remove" data-remove-catalogue-test="' + index + '">Remove</button>');
         });
       };
       addRemoveButtons();

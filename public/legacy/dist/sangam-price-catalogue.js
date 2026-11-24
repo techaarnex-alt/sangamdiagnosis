@@ -9,8 +9,10 @@
   let state;
   try { state = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) { state = {}; }
   state.tests = Array.isArray(state.tests) ? state.tests : [];
+  const removedTests = new Set((state.removedStandardTests || []).map(normalise));
   let changed = false;
   sourceTests.forEach((source) => {
+    if (removedTests.has(normalise(source.name))) return;
     const existing = state.tests.find((test) => normalise(test.name) === normalise(source.name));
     const imported = {
       ...source,
@@ -62,18 +64,41 @@
       tools = document.createElement('section');
       tools.id = 'sangamPriceCatalogueTools';
       tools.className = 'sangam-price-catalogue-tools';
-      tools.innerHTML = '<div><span class="sangam-price-kicker">REFERENCE CATALOGUE IMPORT</span><h3>Laboratory test catalogue</h3><p><b>' + tests.length + ' investigations</b> imported from the supplied price list. Test codes are intentionally not shown. The source does not contain reference intervals; existing validated ranges are retained and all others are clearly marked for laboratory validation.</p></div><label>Search investigations, specimen or method<input id="sangamPriceCatalogueSearch" type="search" placeholder="Search catalogue"></label><div class="sangam-price-summary"><span>Sample & collection</span><span>Handling & method</span><span>Cut-off & reporting</span><span>Net & MRP</span></div>';
+      tools.innerHTML = '<div><span class="sangam-price-kicker">REFERENCE CATALOGUE IMPORT</span><h3>Laboratory test catalogue</h3><p><b>' + tests.length + ' investigations</b> imported from the supplied price list. Profile/panel tests show every included component directly in their catalogue row. Search also finds a component inside its profile.</p></div><label>Search investigations, specimen, method or profile component<input id="sangamPriceCatalogueSearch" type="search" placeholder="Search catalogue"></label><div class="sangam-price-summary"><span>Profiles fully described</span><span>Component-aware search</span><span>Edit rate or remove</span><span>Sample & collection</span></div>';
       table.closest('.rk-card').insertBefore(tools, table.closest('.rk-table-wrap'));
       tools.querySelector('input').addEventListener('input', () => { body.dataset.priceCatalogueRendered = ''; renderCatalogue(); });
     }
+    const profileMembers = (test) => {
+      const name = String(test.name || '');
+      const separator = name.indexOf(':');
+      return separator < 0 ? [] : name.slice(separator + 1).split(',').map((member) => member.trim()).filter(Boolean);
+    };
+    const isProfileGroup = (test) => test.category === 'Profiles';
+    const testRow = (test) => {
+      const index = state.tests.indexOf(test);
+      const members = profileMembers(test);
+      const profileDescription = isProfileGroup(test) ? '<div class="sangam-profile-inline"><b>Profile includes</b><div>' + (members.length ? members.map((member) => '<span>' + safe(member) + '</span>').join('') : '<span>Components are stated in the supplied profile name.</span>') + '</div></div>' : '';
+      return '<tr class="sangam-catalogue-test-row" data-sangam-catalogue-index="' + index + '"><td><b>' + safe(test.name) + '</b><small class="sangam-price-category">' + safe(test.category || 'Laboratory service') + '</small>' + profileDescription + '</td><td><div class="sangam-detail-label">Sample / instruction</div><div class="sangam-detail-copy">' + safe(test.sample || 'Not stated') + '</div></td><td><div class="sangam-detail-label">Temperature</div><div class="sangam-detail-copy">' + safe(test.temperature || 'Not stated') + '</div><div class="sangam-detail-label">Method</div><div class="sangam-detail-copy">' + safe(test.method || 'Not stated') + '</div></td><td><div class="sangam-detail-label">Cut-off</div><div class="sangam-detail-copy">' + safe(test.cutoffTime || 'Not stated') + '</div><div class="sangam-detail-label">Reported on</div><div class="sangam-detail-copy">' + safe(test.reportedOn || 'Not stated') + '</div></td><td><b class="sangam-price-mrp">MRP ' + money(test.mrp) + '</b><span class="sangam-price-net">Net ' + money(test.netPrice) + '</span><label class="sangam-rate-editor">Lab rate (₹)<input data-sangam-rate-input="' + index + '" type="number" min="0" step="0.01" value="' + safe(test.rate == null ? test.mrp : test.rate) + '"></label><button type="button" class="sangam-save-rate" data-sangam-save-rate="' + index + '">Save rate</button><button type="button" class="sangam-remove-test" data-sangam-remove-test="' + index + '">Remove test</button></td><td><div class="sangam-detail-copy">' + safe(test.range || 'Reference range not stated in supplied price list — laboratory validation required.') + '</div><small class="sangam-range-note">' + safe(test.referenceSource || 'Laboratory catalogue') + '</small></td></tr>';
+    };
     const renderCatalogue = () => {
       const query = (tools.querySelector('input').value || '').trim().toLowerCase();
-      const filtered = tests.filter((test) => [test.name, test.sample, test.method, test.category].join(' ').toLowerCase().includes(query));
+      const filtered = tests.filter((test) => [test.name, test.sample, test.method, test.category, profileMembers(test).join(' ')].join(' ').toLowerCase().includes(query));
       table.querySelector('thead').innerHTML = '<tr><th>Investigation</th><th>Sample & collection</th><th>Handling / method</th><th>Cut-off & reporting</th><th>Prices</th><th>Reference range</th></tr>';
-      body.innerHTML = filtered.map((test) => { const index = state.tests.indexOf(test); return '<tr><td><b>' + safe(test.name) + '</b><small class="sangam-price-category">' + safe(test.category || 'Laboratory service') + '</small></td><td><div class="sangam-detail-label">Sample / instruction</div><div class="sangam-detail-copy">' + safe(test.sample || 'Not stated') + '</div></td><td><div class="sangam-detail-label">Temperature</div><div class="sangam-detail-copy">' + safe(test.temperature || 'Not stated') + '</div><div class="sangam-detail-label">Method</div><div class="sangam-detail-copy">' + safe(test.method || 'Not stated') + '</div></td><td><div class="sangam-detail-label">Cut-off</div><div class="sangam-detail-copy">' + safe(test.cutoffTime || 'Not stated') + '</div><div class="sangam-detail-label">Reported on</div><div class="sangam-detail-copy">' + safe(test.reportedOn || 'Not stated') + '</div></td><td><b class="sangam-price-mrp">MRP ' + money(test.mrp) + '</b><span class="sangam-price-net">Net ' + money(test.netPrice) + '</span><label class="sangam-rate-editor">Lab rate (₹)<input data-sangam-rate-input="' + index + '" type="number" min="0" step="0.01" value="' + safe(test.rate == null ? test.mrp : test.rate) + '"></label><button type="button" class="sangam-save-rate" data-sangam-save-rate="' + index + '">Save rate</button></td><td><div class="sangam-detail-copy">' + safe(test.range || 'Reference range not stated in supplied price list — laboratory validation required.') + '</div><small class="sangam-range-note">' + safe(test.referenceSource || 'Laboratory catalogue') + '</small></td></tr>'; }).join('') || '<tr><td colspan="6" class="sangam-empty">No catalogue entries match this search.</td></tr>';
+      body.innerHTML = filtered.map(testRow).join('') || '<tr><td colspan="6" class="sangam-empty">No catalogue entries match this search.</td></tr>';
       body.dataset.priceCatalogueRendered = 'true';
     };
     body.addEventListener('click', (event) => {
+      const removeButton = event.target.closest('[data-sangam-remove-test]');
+      if (removeButton) {
+        const index = Number(removeButton.dataset.sangamRemoveTest);
+        const test = state.tests[index];
+        if (!test || !window.confirm('Remove ' + test.name + ' from the available tests?')) return;
+        state.tests.splice(index, 1);
+        if (test.standardTest) state.removedStandardTests = Array.from(new Set([...(state.removedStandardTests || []), test.name]));
+        localStorage.setItem(storageKey, JSON.stringify(state));
+        window.location.reload();
+        return;
+      }
       const button = event.target.closest('[data-sangam-save-rate]');
       if (!button) return;
       const index = Number(button.dataset.sangamSaveRate);
@@ -91,6 +116,9 @@
   const style = document.createElement('style');
   style.textContent = '.sangam-price-catalogue-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.55fr);gap:18px;margin:0 0 16px;padding:18px;border:1px solid #e3c84f;border-radius:12px;background:linear-gradient(135deg,#fffef5,#fff7cf)}.sangam-price-kicker{color:#a10019;font-size:10px;font-weight:900;letter-spacing:.12em}.sangam-price-catalogue-tools h3{margin:5px 0;color:#1a1710;font-size:18px}.sangam-price-catalogue-tools p{margin:0;color:#5c5120;font-size:12px;line-height:1.55}.sangam-price-catalogue-tools label{display:grid;align-content:start;gap:6px;color:#514816;font-size:11px;font-weight:800}.sangam-price-catalogue-tools input{padding:10px;border:1px solid #dfc866;border-radius:7px;background:#fff;font:inherit}.sangam-price-summary{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}.sangam-price-summary span{padding:5px 8px;border-radius:999px;background:#fff3b5;color:#7c091b;font-size:10px;font-weight:800}.rk-table:has(#rkTestRows) th{vertical-align:bottom}.rk-table:has(#rkTestRows) td{vertical-align:top;white-space:normal}.rk-table:has(#rkTestRows) td:first-child{min-width:190px}.rk-table:has(#rkTestRows) td:nth-child(2){min-width:290px}.rk-table:has(#rkTestRows) td:nth-child(3),.rk-table:has(#rkTestRows) td:nth-child(4){min-width:165px}.rk-table:has(#rkTestRows) td:nth-child(5){min-width:145px}.rk-table:has(#rkTestRows) td:nth-child(6){min-width:230px}.sangam-price-category,.sangam-range-note{display:block;margin-top:5px;color:#806f2a;font-size:10px}.sangam-detail-label{margin:0 0 3px;color:#9a001b;font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.sangam-detail-label:not(:first-child){margin-top:9px}.sangam-detail-copy{color:#3b3a32;font-size:11px;line-height:1.38}.sangam-price-mrp,.sangam-price-net{display:block}.sangam-price-mrp{color:#a10019;font-size:13px}.sangam-price-net{margin-top:5px;color:#655514;font-size:11px;font-weight:700}.sangam-rate-editor{display:grid;margin-top:10px;gap:4px;color:#5f510f!important;font-size:10px!important;font-weight:800}.sangam-rate-editor input{width:100%;padding:7px!important;border-color:#d8ba43!important}.sangam-save-rate{width:100%;margin-top:6px;padding:7px!important;border:1px solid #961b1b!important;border-radius:6px!important;background:#c62828!important;color:#fff!important;font-size:11px!important;font-weight:800}.sangam-save-rate:hover{background:#8e1717!important}.sangam-empty{text-align:center;color:#6f652b!important;padding:30px!important}@media(max-width:760px){.sangam-price-catalogue-tools{grid-template-columns:1fr}}';
   document.head.appendChild(style);
+  const groupStyle = document.createElement('style');
+  groupStyle.textContent = '.sangam-profile-inline{margin-top:9px;padding-top:8px;border-top:1px solid #ecd980;color:#5a4a13}.sangam-profile-inline>b{display:block;margin-bottom:6px;color:#9a001b;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.sangam-profile-inline div{display:flex;flex-wrap:wrap;gap:5px}.sangam-profile-inline span{padding:3px 6px;border:1px solid #ead88c;border-radius:999px;background:#fff8d7;color:#5c4a0c;font-size:9px;font-weight:700}.sangam-catalogue-test-row td{border-top:0!important}.sangam-remove-test{width:100%;margin-top:6px;padding:7px!important;border:1px solid #e37a87!important;border-radius:6px!important;background:#fff2f3!important;color:#9a001a!important;font-size:11px!important;font-weight:800}.sangam-remove-test:hover{background:#ffe0e4!important}';
+  document.head.appendChild(groupStyle);
   const observer = new MutationObserver(() => window.requestAnimationFrame(render));
   observer.observe(document.body, { childList: true, subtree: true });
   window.requestAnimationFrame(render);
